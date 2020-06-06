@@ -24,6 +24,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/DetailKaos.vue')
   },
   {
+    path: '/product/:slug',
+    name: 'DetailProduk',
+    props: true,
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/DetailProduk.vue')
+  },
+  {
     path: '/custom/kaos',
     name: 'CustomKaos',
     component: () => import(/* webpackChunkName: "about" */ '../views/custom/kaos/Kaos.vue')

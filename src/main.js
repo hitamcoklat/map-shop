@@ -16,7 +16,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.use(Buefy);
 Vue.config.productionTip = false
 
-Vue.prototype.$urlAsset = 'http://192.168.0.111/project/simple-shop';
+Vue.prototype.$api = 'http://192.168.0.111:8080/demotoko';
 
 new Vue({
   router,

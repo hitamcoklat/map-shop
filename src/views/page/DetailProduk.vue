@@ -1,7 +1,7 @@
 <template>
 <div>
   <div style="max-width: 500px;" class="container">
-<b-navbar>
+    <b-navbar>
         <template slot="brand">
             <b-navbar-item tag="router-link" :to="{ path: '/' }">
                 <img
@@ -24,35 +24,28 @@
             </b-navbar-dropdown>
         </template>
     </b-navbar>
-    <div style="width: 100%;" class="listProduk">
-      <div class="columns is-multiline is-mobile">
-        <div v-for="(item, index) in dataProduk" :key="index" :ref="index" class="column is-half">
-          <router-link v-bind:to="'product/' + item.slug">
-            <img :alt="item.nama_produk" v-bind:src="item.gambar[0]">
-          </router-link>
+    <div v-for="item in dataProduk" :key="item.id_produk" :ref="item.id_produk" class="column">
+        <b-carousel>
+            <b-carousel-item v-for="(carousel, i) in item.gambar" :key="i">
+                <img :alt="item.nama_produk" v-bind:src="carousel">
+            </b-carousel-item>
+        </b-carousel>                
+        <div style="padding-left: 1em; padding-right: 1em;">
+            <p style="font-weight: bold;">{{item.nama_produk}}</p>
+            <p v-html="item.deskripsi"></p>
+            <button style="width: 100%; margin-top: 10px;" class="button is-info">Beli</button>
         </div>
-      </div>
     </div>
   </div>
 </div>
 </template>
-
-<style scoped>
-  .listProduk .column {
-    background-color: white;
-    padding: 1px;
-  }
-  img {
-      vertical-align:middle
-  }  
-</style>
-
 <script>
 
 import { requestServer } from "@/api";
 
 export default {
-  name: 'Home',
+  name: 'DetailProduk',
+  props: ['slug'],
   data: () => ({
     isShowModal: false,
     dataProduk: []
@@ -67,7 +60,8 @@ export default {
 
   },
   created() {
-    this.fetchData();
+      console.log(this.slug)
+      this.fetchData();
   } 
 }
 </script>
