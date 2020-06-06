@@ -1,22 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import myApi from './myapi'
-
 
 Vue.use(Vuex);
 
 export default {
     state: {
-        products: null,
-        cart: [],
-        toast: {
-            text: "",
-            show: false
-        }
+        cartItem: [],
+        total: 0
     },
     getters: {
         cartSize: (state) => {
-            return state.cart.length;
+            return state.cartItem.length;
         },
         cartTotalAmount: (state) => {
             return state.cart.reduce((total, product) => {
@@ -32,25 +26,21 @@ export default {
             //sets the state's  products property to the products array recieved as payload
             state.products = productsPayload;
         },
-        addToCart: (state, productId) => {
-            //find the product in the products list
-            let product = state.products.find((product) => product.id === productId);
-            //find the product in the cart list
-            let cartProduct = state.cart.find((product) => product.id === productId);
-
-            if (cartProduct) {
-                //product already present in the cart. so increase the quantity
-                cartProduct.quantity++;
+        addToCart: (state, itemProduct) => {
+            console.log(itemProduct.nama_produk)
+            let found = state.cartItem.find(product => product.id_produk == itemProduct.id_produk)
+            // found.quantity = 0;
+            // found.totalPrice = 0;
+            if(found) {
+                found.quantity++
+                found.totalPrice = found.quantity * parseInt(found.harga)
             } else {
-                state.cart.push({
-                    // product newly added to cart
-                    ...product,
-                    stock: product.quantity,
-                    quantity: 1,
-                });
+                state.cartItem.push(itemProduct)
+                new Vue(itemProduct, 'quantity', 1);
+                new Vue(itemProduct, 'totalPrice', itemProduct.harga);
             }
-            //reduce the quantity in products list by 1
-            product.quantity--;
+            // state.cartItem.push(itemProduct);
+            state.total++;
         },
         removeFromCart: (state, productId) => {
             //find the product in the products list

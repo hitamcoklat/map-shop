@@ -6,10 +6,10 @@ import Buefy from "buefy";
 import "buefy/dist/buefy.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSyncAlt, faHandPointRight } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt, faHandPointRight, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faSyncAlt, faHandPointRight);
+library.add(faSyncAlt, faHandPointRight, faCartPlus);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

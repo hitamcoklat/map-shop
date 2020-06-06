@@ -1,7 +1,7 @@
 <template>
 <div>
   <div style="max-width: 500px;" class="container">
-<b-navbar>
+    <b-navbar style="width: 100%; z-index: 9999; top: 0">
         <template slot="brand">
             <b-navbar-item tag="router-link" :to="{ path: '/' }">
                 <img
@@ -33,6 +33,9 @@
         </div>
       </div>
     </div>
+    <div>
+      <p></p>
+    </div>
   </div>
 </div>
 </template>
@@ -41,6 +44,9 @@
   .listProduk .column {
     background-color: white;
     padding: 1px;
+  }
+  .listProduk .column:hover {
+    opacity: 1;
   }
   img {
       vertical-align:middle
