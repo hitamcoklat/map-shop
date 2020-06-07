@@ -30,6 +30,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/DetailProduk.vue')
   },
   {
+    path: '/checkout',
+    name: 'Checkout',
+    props: true,
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/Checkout.vue')
+  },
+  {
     path: '/custom/kaos',
     name: 'CustomKaos',
     component: () => import(/* webpackChunkName: "about" */ '../views/custom/kaos/Kaos.vue')
