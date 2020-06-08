@@ -38,42 +38,28 @@ export default {
         addToCart: (state, itemProduct) => {
             console.log(itemProduct.nama_produk)
             let found = state.cartItem.find(product => product.id_produk == itemProduct.id_produk)
-            // found.quantity = 0;
-            // found.totalPrice = 0;
             if(found) {
-                found.quantity++
-                found.totalPrice = found.quantity * parseInt(found.harga)
+                // found.quantity++
+                found.quantity = itemProduct.quantity
+                state.total = itemProduct.quantity * parseInt(itemProduct.harga)
             } else {
                 state.cartItem.push(itemProduct)
-                new Vue(itemProduct, 'quantity', 1);
-                new Vue(itemProduct, 'totalPrice', itemProduct.harga);
+                state.total = itemProduct.quantity * parseInt(itemProduct.harga)
+                // new Vue(itemProduct, 'totalPrice', itemProduct.quantity * parseInt(itemProduct.harga));
             }
-            // state.cartItem.push(itemProduct);
-            state.total++;
         },
         removeFromCart: (state, productId) => {
             //find the product in the products list
             let product = state.cartItem.find((product) => product.id_produk === productId);
-            //find the product in the cart list
-            // let cartProduct = state.cart.find((product) => product.id_produk === productId);
-
-            // cartProduct.quantity--;
-            //Add back the quantity in products list by 1
             product.quantity--;
-
-            if(product.quantity <= 0 || product.quantity.isNaN()) {
+            state.total = product.quantity * parseInt(product.harga)
+            if(product.quantity <= 0) {
                 let cartProductIndex = state.cartItem.findIndex((product) => product.id_produk === productId);                
                 state.cartItem.splice(cartProductIndex, 1);
             }
         },
         deleteFromCart: (state, productId) => {
-            //find the product in the products list
-            // let product = state.products.find((product) => product.id === productId);
-            //find the product index in the cart list
             let cartProductIndex = state.cartItem.findIndex((product) => product.id_produk === productId);
-            //srt back the quantity of the product to intial quantity
-            // product.quantity = state.cart[cartProductIndex].stock;
-            // remove the product from the cart
             state.cartItem.splice(cartProductIndex, 1);
         },
         showToast: (state, toastText) => {

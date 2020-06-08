@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
+import axios from "axios";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +22,7 @@ Vue.use(Buefy, {
 Vue.config.productionTip = false
 
 Vue.prototype.$api = 'http://192.168.0.111:8080/simple-shop';
+Vue.prototype.$http = axios;
 
 new Vue({
   router,

@@ -33,9 +33,9 @@
         </div>
       </div>
     </div>
-    <div>
-      <p></p>
-    </div>
+
+    <footer-component></footer-component>
+
   </div>
 </div>
 </template>
@@ -57,8 +57,13 @@
 
 import { requestServer } from "@/api";
 
+import Footer from './page/_footer'
+
 export default {
   name: 'Home',
+  components: {
+    'footer-component': Footer
+  },
   data: () => ({
     isShowModal: false,
     dataProduk: []
