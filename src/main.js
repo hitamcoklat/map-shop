@@ -21,7 +21,7 @@ Vue.use(Buefy, {
 
 Vue.config.productionTip = false
 
-Vue.prototype.$api = 'http://192.168.0.111:8080/simple-shop';
+Vue.prototype.$api = 'http://192.168.43.55/project/igtoko';
 Vue.prototype.$http = axios;
 
 new Vue({

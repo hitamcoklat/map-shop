@@ -6,8 +6,9 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/:alias',
     name: 'Home',
+    props: true,
     component: Home
   },
   {
@@ -17,6 +18,31 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/',
+    name: 'HomeLandingPage',
+    component: () => import(/* webpackChunkName: "about" */ '../views/HomeLandingPage.vue')
+  },
+  {
+    path: '/p/buat-toko',
+    name: 'BuatToko',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/BuatToko.vue')
+  },
+  {
+    path: '/p/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/Login.vue')
+  },
+  {
+    path: '/p/manage',
+    name: 'Manage',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/Manage.vue')
+  },
+  {
+    path: '/p/manage-produk',
+    name: 'ManageProduk',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/ManageProduk.vue')
   },
   {
     path: '/kaos',

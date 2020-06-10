@@ -61,6 +61,7 @@ import Footer from './page/_footer'
 
 export default {
   name: 'Home',
+  props: ['alias'],
   components: {
     'footer-component': Footer
   },
@@ -79,6 +80,7 @@ export default {
   },
   created() {
     this.fetchData();
+    console.log(this.alias)
   } 
 }
 </script>
