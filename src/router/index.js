@@ -45,9 +45,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/ManageProduk.vue')
   },
   {
-    path: '/kaos',
-    name: 'DetailKaos',
-    component: () => import(/* webpackChunkName: "about" */ '../views/page/DetailKaos.vue')
+    path: '/p/input-produk',
+    name: 'InputProduk',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/InputProduk.vue')
   },
   {
     path: '/product/:slug',
@@ -60,15 +60,11 @@ const routes = [
     name: 'Checkout',
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/page/Checkout.vue')
-  },
-  {
-    path: '/custom/kaos',
-    name: 'CustomKaos',
-    component: () => import(/* webpackChunkName: "about" */ '../views/custom/kaos/Kaos.vue')
   }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 

@@ -7,10 +7,10 @@ import "buefy/dist/buefy.css";
 import axios from "axios";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle);
+library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

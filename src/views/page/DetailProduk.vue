@@ -1,29 +1,7 @@
 <template>
 <div>
   <div style="max-width: 500px;" class="container">
-    <b-navbar style="position: fixed; width: 100%; z-index: 9999; top: 0">
-        <template slot="brand">
-            <b-navbar-item tag="router-link" :to="{ path: '/' }">
-                <img
-                    src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-                    alt="Lightweight UI components for Vue.js based on Bulma"
-                >
-            </b-navbar-item>
-        </template>
-        <template slot="start">
-            <b-navbar-item href="#">
-                Home
-            </b-navbar-item>
-            <b-navbar-dropdown label="Category">
-                <b-navbar-item href="#">
-                    About
-                </b-navbar-item>
-                <b-navbar-item href="#">
-                    Contact
-                </b-navbar-item>
-            </b-navbar-dropdown>
-        </template>
-    </b-navbar>  
+    <navbar-user />
     <div style="margin-bottom: 2.5em;" v-for="item in dataProduk" :key="item.id_produk" :ref="item.id_produk" class="column" :id="item.slug">
         <b-carousel>
             <b-carousel-item v-for="(carousel, i) in item.gambar" :key="i">
@@ -104,11 +82,14 @@
 <script>
 
 import { requestServer } from "@/api";
+import NavbarUser from './_NavbarUser'
 
 export default {
-
   name: 'DetailProduk',
   props: ['slug'],
+  components: {
+    'navbar-user': NavbarUser
+  },  
   data: () => ({
     isShowModal: false,
     isCardModalActive: false,

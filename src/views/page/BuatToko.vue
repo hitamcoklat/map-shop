@@ -1,28 +1,6 @@
 <template>
-    <div>
-    <b-navbar style="width: 100%; z-index: 9999; top: 0">
-        <template slot="brand">
-            <b-navbar-item tag="router-link" :to="{ path: '/' }">
-                <img
-                    src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-                    alt="Lightweight UI components for Vue.js based on Bulma"
-                >
-            </b-navbar-item>
-        </template>
-        <template slot="start">
-            <router-link to="/p/login">
-                <b-navbar-item>
-                    Masuk
-                </b-navbar-item>
-            </router-link>
-            <b-navbar-item href="#">
-                Tentang
-            </b-navbar-item>
-            <b-navbar-item href="#">
-                Panduan
-            </b-navbar-item>
-        </template>
-    </b-navbar>
+    <div style="max-width: 450px;" class="container">
+    <navbar-user />
     <section style="padding-left: 1em; padding-right: 1em; padding-top: 1em;">
 
         <b-message title="Info" type="is-info" aria-close-label="Close message">
@@ -54,12 +32,21 @@
         </div>        
 
     </section>
+    <br />
+    <br />
+    <br />
     </div>
 </template>
 
 <script>
+
+import NavbarUser from './_NavbarUser'
+
 export default {
   name: 'BuatToko',
+  components: {
+    'navbar-user': NavbarUser
+  },  
   data: () => ({
     isShowModal: false,
     emailUsername: false,
