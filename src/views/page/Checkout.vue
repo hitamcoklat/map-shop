@@ -126,6 +126,7 @@ import NavbarUser from './_NavbarUser'
 export default {
 
   name: 'Checkout',
+  props: ['alias'],
   components: {
     'footer-component': Footer,
     'navbar-user': NavbarUser
@@ -157,8 +158,11 @@ export default {
     },
 
     submitPesanan: function() {
+
         console.log(this.form)
+        
         const { cart } = this.$store.state;
+        
         let data = {
             DATA_KUSTOMER: {
                 NAMA_LENGKAP: this.form.NAMA_LENGKAP,
@@ -171,28 +175,31 @@ export default {
             DATA_ORDER: cart.cartItem,
             TOTAL_HARGA: cart.total
         }
+
         this.$http.post(this.$api + '/api/inputPesanan', data)
+    
     }
 
   },
 
-  beforeCreate() {
+  created() {
+      
       if(this.$store.getters.cartSize <= 0) {
           alert('Your cart is empty');
-          this.$router.push('/')
+          this.$router.push('/' + this.alias)
+          return false;
       }
-  },
 
-  created() {
       const { cart } = this.$store.state;
       this.listProduk = cart.cartItem;
       this.totalPrice = cart.total
       console.log(this.listProduk);
   },
+
   updated() {
       if(this.$store.getters.cartSize <= 0) {
           alert('Your cart is empty');
-          this.$router.push('/')
+          this.$router.push('/' + this.alias)
       }
       this.listProduk = this.$store.getters.getCart;  
   }

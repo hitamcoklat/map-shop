@@ -50,13 +50,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/InputProduk.vue')
   },
   {
-    path: '/product/:slug',
+    path: '/p/list-produk',
+    name: 'ListProduk',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/ListProduk.vue')
+  },
+  {
+    path: '/:alias/product/:slug',
     name: 'DetailProduk',
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/page/DetailProduk.vue')
   },
   {
-    path: '/checkout',
+    path: '/:alias/checkout',
     name: 'Checkout',
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/page/Checkout.vue')
@@ -64,7 +69,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   routes
 })
 

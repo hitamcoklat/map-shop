@@ -2,16 +2,16 @@
 <div>
   <div style="max-width: 500px;" class="container">
     <navbar-user />
-    <div style="margin-bottom: 2.5em;" v-for="item in dataProduk" :key="item.id_produk" :ref="item.id_produk" class="column" :id="item.slug">
+    <div style="margin-bottom: 2.5em;" v-for="item in dataProduk" :key="item.ID" :ref="item.ID" class="column" :id="item.SLUG">
         <b-carousel>
-            <b-carousel-item v-for="(carousel, i) in item.gambar" :key="i">
-                <img :alt="item.nama_produk" v-bind:src="carousel">
+            <b-carousel-item v-for="(carousel, i) in item.IMAGES" :key="i">
+                <img :alt="item.NAMA_PRODUK" v-bind:src="carousel.img">
             </b-carousel-item>
         </b-carousel>                
         <div style="padding-left: 1em; padding-right: 1em;">
-            <p style="font-weight: normal;">{{item.nama_produk}}</p>
-            <p style="font-weight: bold;">Rp {{formatPrice(item.harga)}}</p>
-            <p style="border-top: 1px dashed #ccc; padding-top: 1em; margin-top: 1em;" v-html="item.deskripsi"></p>
+            <p style="font-weight: normal;">{{item.NAMA_PRODUK}}</p>
+            <p style="font-weight: bold;">Rp {{formatPrice(item.HARGA)}}</p>
+            <p style="border-top: 1px dashed #ccc; padding-top: 1em; margin-top: 1em;" v-html="item.CAPTION"></p>
             <button style="width: 100%; margin-top: 10px;" v-on:click="popBeli(item)" class="button is-info">
                 <font-awesome-icon style="margin-right: 5px;" icon="cart-plus" /> Beli
             </button>
@@ -24,12 +24,12 @@
                 <div class="media">
                     <div class="media-left">
                         <figure class="image is-48x48">
-                            <img :alt="selectedProduk.nama_produk" v-bind:src="selectedProduk.gambar[0]">
+                            <img :alt="selectedProduk.NAMA_PRODUK" v-bind:src="selectedProduk.IMAGES[0].thumb">
                         </figure>
                     </div>
                     <div class="media-content">
-                        <p class="title is-5">{{selectedProduk.nama_produk}}</p>
-                        <p class="subtitle is-6">Rp {{formatPrice(selectedProduk.harga)}}</p>
+                        <p class="title is-5">{{selectedProduk.NAMA_PRODUK}}</p>
+                        <p class="subtitle is-6">Rp {{formatPrice(selectedProduk.HARGA)}}</p>
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@ import NavbarUser from './_NavbarUser'
 
 export default {
   name: 'DetailProduk',
-  props: ['slug'],
+  props: ['slug', 'alias'],
   components: {
     'navbar-user': NavbarUser
   },  
@@ -96,7 +96,8 @@ export default {
     dataProduk: [],
     quantity: 1,
     selectedProduk: [],
-    jmlProduk: 0
+    jmlProduk: 0,
+    user: ''
   }),
   methods: {
 
@@ -110,7 +111,7 @@ export default {
     },
 
     toCheckoutPage: function() {
-        this.$router.push('/checkout')
+        this.$router.push('/' + this.alias + '/checkout')
     },
 
     decQuantity: function () {
@@ -120,7 +121,7 @@ export default {
     },
 
     fetchData: async function() {
-        const response = await requestServer(this.$api + '/api/getAllProduk', 'get')
+        const response = await requestServer(this.$api + '/api/getAllProduk?user=' + this.user, 'get')
         this.dataProduk = response.data.data;
         console.log(this.dataProduk)
     },
@@ -142,6 +143,8 @@ export default {
   },
   created() {
       console.log(this.slug)      
+      console.log(this.alias) 
+      this.user = this.alias     
       this.fetchData();
       this.jmlProduk = this.$store.getters.cartSize;
   },

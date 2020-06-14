@@ -34,12 +34,16 @@ export default {
   }),
   methods: {
       submitToko: function() {    
-
-          let data = {
-              USERNAME: this.form.username,
-              PASSWORD: this.form.password
-          };
-            this.$http.post(this.$api + '/api/login', data)
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }
+        let data = {
+            USERNAME: this.form.username,
+            PASSWORD: this.form.password
+        };
+            this.$http.post(this.$api + '/api/login', data, {
+                headers: headers
+            })
                 .then((res) => {
                     if(res.data.status == true) {
                         let data = {

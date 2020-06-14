@@ -34,39 +34,38 @@
             </b-field> 
             <div style="display: flex; flex-direction: row; margin-bottom: 1em;">
                 <figure v-for="(item, index) in fotoProduk" :key="index" :ref="index" style="margin-right: 1px;" class="image is-64x64">
-                    <img :alt="item.name" v-bind:src="item.thumbnailUrl">
+                    <img :alt="item.thumb" v-bind:src="item.thumb">
                 </figure>
             </div>
         </div>
-        <IKContext
-            style="margin-bottom: 1em; margin-top: 1em;"
-            :publicKey="publicKey"
-            :urlEndpoint="urlEndpoint"
-            :authenticationEndpoint="authenticationEndpoint"           
-        >
-            <IKUpload 
-                class="button is-default"
-                fileName="igtoko.jpg" 
-                v-bind:tags="['tag1']" 
-                v-bind:responseFields="['tags']" 
-                :onError="onError" 
-                :onSuccess="onSuccess"
-                @change="onChangeHandler"                
-                />
-        </IKContext>        
-        <div class="buttons">
-            <b-button v-on:click="submitProduk" type="is-primary" expanded>Buat Produk</b-button>
+        <div style="margin-bottom: 1em;" class="file">
+            <label class="file-label">
+                <input class="file-input" accept="image/x-png,image/gif,image/jpeg" type="file" ref="imageFile" @change="handleUpload">
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <font-awesome-icon icon="upload" />
+                    </span>
+                    <span class="file-label">
+                        Choose a file…
+                    </span>
+                </span>
+            </label>
         </div>        
+        <div style="margin-top: 1em;" class="buttons">
+            <b-button v-on:click="submitProduk" type="is-primary" expanded>Buat Produk</b-button>
+        </div>
         <br />
         <br />
         <br />
     </section>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
     </div>
 </template>
 
 <script>
 
 import NavbarUser from './_NavbarUser'
+import ImageKit from 'imagekit-javascript';
 import { IKImage, IKContext, IKUpload } from "imagekitio-vue";
 let urlEndpoint= "https://ik.imagekit.io/igtoko";
 
@@ -84,10 +83,47 @@ export default {
     file: null,
     urlEndpoint: "https://ik.imagekit.io/igtoko",
     publicKey: "public_lxCCE/BxwyGPmc6KsKr2uGXWenE=",
-    authenticationEndpoint: 'http://192.168.43.55/project/igtoko/Upload',
-    fotoProduk: []   
+    authenticationEndpoint: '',
+    fotoProduk: [],
+    isLoading: false  
   }),
   methods: {
+
+    handleUpload: function () {
+
+        this.isLoading = true;
+
+        var imagekit = new ImageKit({
+            publicKey : this.publicKey,
+            urlEndpoint : this.urlEndpoint,
+            authenticationEndpoint : this.authenticationEndpoint
+        });
+
+        var file = document.getElementById("file1");
+        imagekit.upload({
+            file : this.$refs.imageFile.files[0],
+            fileName : "igtoko.jpg",
+            tags : ["tag1"]
+        }, (err, result) => {
+            console.log(err)
+            console.log(result)
+            this.isLoading = false;
+            let dataImage = {
+                thumb: result.thumbnailUrl,
+                img: result.url
+            }            
+            this.fotoProduk.push(dataImage)
+
+            console.log(this.fotoProduk)
+            // console.log(arguments);
+            // console.log(imagekit.url({
+            //     src: result.url,
+            //     transformation : [{ height: 300, width: 400}]
+            // }));
+        })        
+
+    },
+
     submitProduk: function() {
 
         let data = {
@@ -95,13 +131,30 @@ export default {
             NAMA_PRODUK: this.form.nama_produk,
             HARGA: this.form.harga,
             CAPTION: this.form.caption,
-            BERAT: this.form.berat    
+            BERAT: this.form.berat,
+            USERNAME: this.$store.getters.getUser.USERNAME 
         }
 
-        this.$http.post(this.$api + '/api/submitProduk', data)
-            .then((res) => {
-                console.log(res)
-            })        
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }
+
+        this.$http.post(this.$api + '/api/submitProduk', data, {
+            headers: headers
+        }).then((res) => {
+            if(res.data.status == true) {
+                this.form = {
+                    nama_produk: '',
+                    harga: '',
+                    caption: '',
+                    berat: ''
+                };
+                this.fotoProduk = []
+                alert('Produk berhasil di tambahkan!')
+            } else {
+                alert('Terjadi kesalahan!')
+            }
+        })        
 
     },
     deleteDropFile(index) {
@@ -114,13 +167,13 @@ export default {
     onError(err) {
         console.log(err)
     },
-    onChangeHandler(e) {
+    onProcess() {
         // console.log(e)
         console.log('uploading...')
     }
   },
   created() {
-      
+      this.authenticationEndpoint = this.$api + '/Upload'
   },
   beforeCreate() {
       if(this.$store.getters.getLoginStatus == false) {

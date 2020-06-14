@@ -27,8 +27,8 @@
     <div style="width: 100%;" class="listProduk">
       <div class="columns is-multiline is-mobile">
         <div v-for="(item, index) in dataProduk" :key="index" :ref="index" class="column is-half">
-          <router-link v-bind:to="'product/' + item.slug">
-            <img :alt="item.nama_produk" v-bind:src="item.gambar[0]">
+          <router-link v-bind:to="alias + '/product/' + item.SLUG">
+            <img style="width: 100%;" :alt="item.nama_produk" v-bind:src="item.IMAGES[0].img">
           </router-link>
         </div>
       </div>
@@ -67,20 +67,36 @@ export default {
   },
   data: () => ({
     isShowModal: false,
-    dataProduk: []
+    dataProduk: [],
+    namaToko: ''
   }),
   methods: {
 
       fetchData: async function() {
-          const response = await requestServer(this.$api + '/api/getAllProduk', 'get')
-          this.dataProduk = response.data.data;
+          const response = await requestServer(this.$api + '/api/getAllProduk/?user=' + this.namaToko, 'get')
+          if(response.data.status ==  false) {
+            this.$buefy.dialog.confirm({
+                title: 'Info',
+                message: `Ops, toko tidak ditemukan :(`,
+                cancelText: 'Batal',
+                confirmText: 'Ok',
+                type: 'is-success',
+                onConfirm: () => this.$router.push('/')
+            })            
+          } else {
+            this.dataProduk = response.data.data;
+          }
           console.log(this.dataProduk)
       }
 
   },
   created() {
+    this.namaToko = this.alias;
     this.fetchData();
     console.log(this.alias)
-  } 
+  },
+  beforeCreate() {
+    // this.fetchData();
+  }
 }
 </script>

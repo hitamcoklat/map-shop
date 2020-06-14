@@ -4,7 +4,7 @@
     <section style="padding-left: 1em; padding-right: 1em; padding-top: 1em;">
 
         <b-message title="Info" type="is-info" aria-close-label="Close message">
-            Silahkan lengkapi form dibawah ini untuk dapat membuat toko IG.
+            Silahkan lengkapi form dibawah ini untuk dapat membuat IGToko anda.
         </b-message>
 
         <b-field label="Nama Toko / Username" message="Kombinasi huruf dan angka saja yang diijinkan.">
@@ -54,21 +54,25 @@ export default {
   }),
   methods: {
       submitToko: async function() {
-            let data = {
-                USERNAME: this.form.username,
-                EMAIL: this.form.email,
-                NO_HP: this.form.no_hp,
-                PASSWORD: this.form.password
-            }
-            this.$http.post(this.$api + '/api/buatToko', data)
-                .then((res) => {
-                    console.log(res)
-                    if(res.data.status == true) {
-                        alert('User berhasil dibuat.\n Silahkan cek email untuk mengaktifkan toko anda.')
-                    } else {
-                        alert(res.data.msg)
-                    }
-                })        
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }          
+        let data = {
+            USERNAME: this.form.username,
+            EMAIL: this.form.email,
+            NO_HP: this.form.no_hp,
+            PASSWORD: this.form.password
+        }
+        this.$http.post(this.$api + '/api/buatToko', data, {
+            headers: headers
+        }).then((res) => {
+                console.log(res)
+                if(res.data.status == true) {
+                    alert('User berhasil dibuat.\n Silahkan cek email untuk mengaktifkan toko anda.')
+                } else {
+                    alert(res.data.msg)
+                }
+            })        
       }
   },
   created() {
