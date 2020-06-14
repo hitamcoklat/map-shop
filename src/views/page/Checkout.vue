@@ -183,7 +183,7 @@ export default {
   },
 
   created() {
-      
+
       if(this.$store.getters.cartSize <= 0) {
           alert('Your cart is empty');
           this.$router.push('/' + this.alias)
@@ -194,6 +194,7 @@ export default {
       this.listProduk = cart.cartItem;
       this.totalPrice = cart.total
       console.log(this.listProduk);
+      
   },
 
   updated() {

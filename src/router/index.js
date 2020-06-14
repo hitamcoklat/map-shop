@@ -55,6 +55,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/ListProduk.vue')
   },
   {
+    path: '/p/setting-toko',
+    name: 'SettingToko',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/SettingToko.vue')
+  },
+  {
     path: '/:alias/product/:slug',
     name: 'DetailProduk',
     props: true,
