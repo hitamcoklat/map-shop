@@ -17,7 +17,7 @@
         </b-field>
 
         <b-field>
-            <b-input placeholder="No. WhatsApp"
+            <b-input placeholder="No. WA, Cth: 081283978"
                 v-model="form.NO_HP"
                 type="number"
                 icon-pack="fas"
@@ -30,6 +30,7 @@
             <b-input placeholder="Email Aktif"
                 v-model="form.EMAIL"
                 icon-pack="fas"
+                type="email"
                 size="is-medium"
                 icon="at">
             </b-input>
@@ -58,19 +59,19 @@
         
         <h2 style="text-align: center;">DETAIL PEMBELIAN</h2>
         <br />
-        <div v-for="item in listProduk" :key="item.id_produk" :ref="item.id_produk" class="media">
-            <div v-on:click="toProduct(item.slug)" class="media-left">
+        <div v-for="item in listProduk" :key="item.ID" :ref="item.ID" class="media">
+            <div v-on:click="toProduct(item.SLUG)" class="media-left">
                 <figure class="image is-48x48">
-                    <img :alt="item.nama_produk" v-bind:src="item.gambar[0]">
+                    <img :alt="item.NAMA_PRODUK" v-bind:src="item.IMAGES[0].thumb" />
                 </figure>
             </div>
             <div class="media-content">
                 <div class="columns is-centered is-vcentered is-mobile">
                     <div class="column is-9">
-                        <p>{{item.nama_produk}}</p>
-                        <p style="font-weight: bold;">Rp {{formatPrice(item.harga)}} x {{item.quantity}} item(s)</p>                        
+                        <p>{{item.NAMA_PRODUK}}</p>
+                        <p style="font-weight: bold;">Rp {{formatPrice(item.HARGA)}} x {{item.quantity}} item(s)</p>                        
                     </div>
-                    <div v-on:click="removeCart(item.id_produk)" class="column is-3 is-danger is-narrow has-text-centered">
+                    <div v-on:click="removeCart(item.ID)" class="column is-3 is-danger is-narrow has-text-centered">
                         <font-awesome-icon style="margin-right: 5px; color: red;" icon="times-circle" />
                     </div>
                 </div>
@@ -107,12 +108,16 @@
     </section>
 
     <section style="padding-left: 1em; padding-right: 1em; margin-top: 2em;">
-        <button style="font-size: 1.1em;" v-on:click="submitPesanan()" class="button is-success is-fullwidth">
-            Buat Pesanan
+        <button size="is-medium" style="font-size: 1.1em;" v-on:click="submitPesanan()" class="button is-success is-fullwidth">
+            <font-awesome-icon style="margin-right: 5px; color: white;" icon="comments" />Buat Pesanan
         </button>             
     </section>
 
-    <footer-component /> 
+    <footer class="footer">
+      <div class="content has-text-centered">
+        {{dataUser.ALAMAT}}
+      </div>
+    </footer>
 
   </div>
 </div>
@@ -135,6 +140,7 @@ export default {
       listProduk: [],
       openCatatan: false,
       form: [],
+      dataUser: [],
       totalPrice: 0
   }),
   methods: {
@@ -145,7 +151,7 @@ export default {
     },
 
     toProduct: function(slug) {
-        this.$router.push('/product/' + slug)
+        this.$router.push('/'+this.alias+'/product/' + slug)
     },
 
     removeCart: function(id) {
@@ -156,6 +162,14 @@ export default {
         this.listProduk = cart.cartItem;
         this.totalPrice = cart.total             
     },
+
+    fetchDataUser: function(username) {
+        this.$http.get(this.$api + '/api/getUserByUsername?u=' + username)
+            .then((res) => {
+                this.dataUser = res.data.data;
+                console.log(res)
+            })
+    },      
 
     submitPesanan: function() {
 
@@ -173,11 +187,60 @@ export default {
                 CATATAN: this.form.CATATAN
             },
             DATA_ORDER: cart.cartItem,
-            TOTAL_HARGA: cart.total
+            TOTAL_HARGA: this.$store.getters.cartTotalAmount
         }
 
-        this.$http.post(this.$api + '/api/inputPesanan', data)
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }        
+
+        this.$http.post(this.$api + '/api/inputPesanan?u=' + this.alias, data, {
+            headers: headers
+        })
+            .then((res) => {
+                console.log(res)
+                if(res.data.status == true) {
+                    this.kirimWhatsapp()
+                    this.$store.commit('resetCart');
+                    this.form = []
+                } else {
+                    alert(res.data.msg)
+                }
+                // if(res.statu)
+            })
     
+    },
+    kirimWhatsapp: function() {
+        let parameter = '';
+        // let urlWa = 'https://web.whatsapp.com/send';
+        let urlWa = 'https://api.whatsapp.com/send';
+        // if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        //     urlWa = 'whatsapp://send';
+        // }
+        let no_hp = this.dataUser.NO_HP;
+            no_hp = no_hp.replace('0', '+62');
+
+        let dataKirim = '';
+        let dataProduk = this.$store.state.cart.cartItem;
+            Object.keys(dataProduk).forEach((key) => {
+                dataKirim += '----------------------%0A';
+                dataKirim += 'Nama Produk: ' + dataProduk[key].NAMA_PRODUK + '%0A';
+                dataKirim += 'Harga: Rp' + dataProduk[key].HARGA + '%0A';
+                dataKirim += 'Qty: ' + dataProduk[key].quantity + '%0A';
+                dataKirim += '----------------------%0A';
+            })
+
+        parameter = urlWa + '?phone=' + no_hp + '&text=Halo Admin Toko *' + this.alias + '*, saya *'+this.form.NAMA_LENGKAP+'*, %0A mau pesan: %0A '+dataKirim+'*Atas nama:* %0A' + this.form.NAMA_LENGKAP +', %0A*E-mail:* %0A'+this.form.EMAIL;
+
+        console.log(parameter)
+
+        var w = 960,
+            h = 540,
+            left = Number((screen.width / 2) - (w / 2)),
+            tops = Number((screen.height / 2) - (h / 2)),
+            popupWindow = window.open(parameter, '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=1, copyhistory=no, width=' + w + ', height=' + h + ', top=' + tops + ', left=' + left);
+
+            popupWindow.focus();        
     }
 
   },
@@ -192,8 +255,8 @@ export default {
 
       const { cart } = this.$store.state;
       this.listProduk = cart.cartItem;
-      this.totalPrice = cart.total
-      console.log(this.listProduk);
+      this.totalPrice = this.$store.getters.cartTotalAmount
+      this.fetchDataUser(this.alias)
       
   },
 

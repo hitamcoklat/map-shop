@@ -55,6 +55,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/ListProduk.vue')
   },
   {
+    path: '/p/list-order',
+    name: 'ListOrder',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/ListOrder.vue')
+  },
+  {
+    path: '/p/faq',
+    name: 'Faq',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/Faq.vue')
+  },
+  {
     path: '/p/setting-toko',
     name: 'SettingToko',
     component: () => import(/* webpackChunkName: "about" */ '../views/page/SettingToko.vue')

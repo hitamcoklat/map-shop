@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="max-width: 500px;" class="container">
         <navbar-user />
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-left: 1em; padding-right: 1em;" class="container">
 
@@ -22,8 +22,8 @@
                 </div>
                 <br />
                 <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Edit</a>
-                    <a v-on:click="confirmCustom(item.ID)" style="color: red;" href="#" class="card-footer-item">Delete</a>
+                    <span v-on:click="editProduk(item.ID)" style="color: blue; cursor: pointer;" class="card-footer-item">Edit</span>
+                    <span v-on:click="confirmCustom(item.ID)" style="color: red; cursor: pointer;" class="card-footer-item">Delete</span>
                 </footer>
             </div>
             <br />
@@ -63,6 +63,9 @@ export default {
           this.dataProduk = response.data.data;
           console.log(this.dataProduk)
       },
+      editProduk: function (id) {
+          this.$router.push({name: 'InputProduk', params: { id: id }})
+      },    
       loadMore: async function () {
           if(this.dataExist) {
             this.busy = true

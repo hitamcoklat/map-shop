@@ -93,7 +93,7 @@ export default {
   data: () => ({
     isShowModal: false,
     isCardModalActive: false,
-    dataProduk: [],
+    dataProduk: [],    
     quantity: 1,
     selectedProduk: [],
     jmlProduk: 0,
@@ -142,10 +142,11 @@ export default {
 
   },
   created() {
-      console.log(this.slug)      
-      console.log(this.alias) 
-      this.user = this.alias     
-      this.fetchData();
+      this.user = this.alias
+      try{
+        this.fetchData();
+        this.fetchDataUser(this.user);
+      } catch(e) {}
       this.jmlProduk = this.$store.getters.cartSize;
   },
   updated() {

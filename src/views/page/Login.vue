@@ -4,16 +4,19 @@
         <section style="padding-left: 1em; padding-right: 1em; padding-top: 1em;">
 
             <b-field label="Nama Toko / Username">
-                <b-input v-model="form.username" placeholder="Masukan nama toko, Cth: toko7863"></b-input>
+                <b-input size="is-medium" v-model="form.username" placeholder="Masukan nama toko, Cth: toko7863"></b-input>
             </b-field>
 
             <b-field label="Password">
-                <b-input v-model="form.password" placeholder="Masukan password"></b-input>
+                <b-input size="is-medium" type="password" v-model="form.password" placeholder="Masukan password" password-reveal></b-input>
             </b-field>
 
-            <div class="buttons">
-                <b-button v-on:click="submitToko" type="is-primary" expanded>Masuk</b-button>
-            </div>        
+            <div style="margin-top: 2em;" class="buttons">
+                <b-button size="is-medium" v-on:click="submitToko" type="is-primary" expanded>Masuk</b-button>
+            </div>
+            <div style="margin-top: 2em;" class="buttons">
+                <b-button size="is-small" v-on:click="submitToko" type="is-text" tag="router-link" :to="{ path: '/p/buat-toko' }" expanded>Buat Toko Baru</b-button>
+            </div>
 
         </section>
     </div>

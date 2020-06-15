@@ -33,9 +33,11 @@
         </div>
       </div>
     </div>
-
-    <footer-component></footer-component>
-
+    <footer class="footer">
+      <div class="content has-text-centered">
+        {{dataUser.ALAMAT}}
+      </div>
+  </footer>
   </div>
 </div>
 </template>
@@ -68,7 +70,8 @@ export default {
   data: () => ({
     isShowModal: false,
     dataProduk: [],
-    namaToko: ''
+    namaToko: '',
+    dataUser: []
   }),
   methods: {
 
@@ -87,12 +90,21 @@ export default {
             this.dataProduk = response.data.data;
           }
           console.log(this.dataProduk)
-      }
+      },
+
+      fetchDataUser: function(username) {
+          this.$http.get(this.$api + '/api/getUserByUsername?u=' + username)
+              .then((res) => {
+                  this.dataUser = res.data.data;
+                  console.log(res)
+              })
+      },      
 
   },
   created() {
     this.namaToko = this.alias;
     this.fetchData();
+    this.fetchDataUser(this.namaToko);
     console.log(this.alias)
   },
   beforeCreate() {

@@ -7,11 +7,11 @@ import "buefy/dist/buefy.css";
 import axios from "axios";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight, faComments } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import infiniteScroll from 'vue-infinite-scroll'
 
-library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight);
+library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight, faComments);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
@@ -24,7 +24,7 @@ Vue.use(infiniteScroll)
 
 Vue.config.productionTip = false
 
-Vue.prototype.$api = 'http://192.168.43.55/project/igtoko';
+Vue.prototype.$api = 'http://192.168.0.111/project/igtoko';
 Vue.prototype.$http = axios;
 
 new Vue({

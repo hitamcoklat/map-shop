@@ -33,11 +33,12 @@
             <b-field label="Foto Produk">
             </b-field> 
             <div style="display: flex; flex-direction: row; margin-bottom: 1em;">
-                <figure v-for="(item, index) in fotoProduk" :key="index" :ref="index" style="margin-right: 1px;" class="image is-64x64">
+                <figure v-for="(item, index) in fotoProduk" :key="index" :ref="index" style="margin-right: 1px;" class="image is-64x64" v-on:click="hapusImage(index)">
                     <img :alt="item.thumb" v-bind:src="item.thumb">
                 </figure>
             </div>
         </div>
+        
         <div style="margin-bottom: 1em;" class="file">
             <label class="file-label">
                 <input class="file-input" accept="image/x-png,image/gif,image/jpeg" type="file" ref="imageFile" @change="handleUpload">
@@ -52,7 +53,10 @@
             </label>
         </div>        
         <div style="margin-top: 1em;" class="buttons">
-            <b-button v-on:click="submitProduk" type="is-primary" expanded>Buat Produk</b-button>
+            <b-button v-on:click="submitProduk" type="is-primary" expanded>
+                <span v-if="isUpdate">Edit Produk</span>
+                <span v-else>Buat Produk</span>
+            </b-button>
         </div>
         <br />
         <br />
@@ -85,7 +89,9 @@ export default {
     publicKey: "public_lxCCE/BxwyGPmc6KsKr2uGXWenE=",
     authenticationEndpoint: '',
     fotoProduk: [],
-    isLoading: false  
+    isLoading: false,
+    isUpdate: false,
+    idProdukEdit: ""
   }),
   methods: {
 
@@ -105,21 +111,12 @@ export default {
             fileName : "igtoko.jpg",
             tags : ["tag1"]
         }, (err, result) => {
-            console.log(err)
-            console.log(result)
             this.isLoading = false;
             let dataImage = {
                 thumb: result.thumbnailUrl,
                 img: result.url
             }            
             this.fotoProduk.push(dataImage)
-
-            console.log(this.fotoProduk)
-            // console.log(arguments);
-            // console.log(imagekit.url({
-            //     src: result.url,
-            //     transformation : [{ height: 300, width: 400}]
-            // }));
         })        
 
     },
@@ -132,7 +129,14 @@ export default {
             HARGA: this.form.harga,
             CAPTION: this.form.caption,
             BERAT: this.form.berat,
-            USERNAME: this.$store.getters.getUser.USERNAME 
+            USERNAME: this.$store.getters.getUser.USERNAME,
+            EMAIL: this.$store.getters.getUser.EMAIL,
+            TOKEN: this.$store.getters.getUser.TOKEN,
+            UPDATE: this.isUpdate
+        }
+
+        if(this.isUpdate) {
+            data['ID'] = this.idProdukEdit
         }
 
         const headers = {
@@ -157,6 +161,38 @@ export default {
         })        
 
     },
+    hapusImage: function(id) {
+        const index = this.fotoProduk.indexOf(id);
+        this.$buefy.dialog.confirm({
+            message: 'Apakah anda yakin ingin menghapus foto ini?',
+            onConfirm: () => {
+                this.fotoProduk.splice(index)
+                this.$buefy.toast.open({
+                    message: `Foto berhasil dihapus`,
+                    position: 'is-bottom',
+                    type: 'is-success'
+                })  
+            }
+        })      
+    },
+    fetchDataProduk: function(id) {
+
+        let u = this.$store.getters.getUser.USERNAME;
+        
+        this.$http.get(this.$api + '/api/getProdukById?id=' + id + '&u=' + u)
+            .then((res) => {
+                console.log(res)
+                this.form = {
+                    nama_produk: res.data.data.NAMA_PRODUK,
+                    berat: res.data.data.BERAT,
+                    caption: res.data.data.CAPTION,
+                    harga: res.data.data.HARGA
+                }
+                this.fotoProduk = res.data.data.IMAGES;
+                console.log(this.form)
+            })
+
+    },
     deleteDropFile(index) {
         this.dropFiles.splice(index, 1)
     },
@@ -173,6 +209,15 @@ export default {
     }
   },
   created() {
+      if(typeof this.$route.params.id == 'undefined' || typeof this.$route.params.id == null) {
+          this.isUpdate = false
+          console.log('Input Produk')
+      } else {
+          this.isUpdate = true
+          this.idProdukEdit = this.$route.params.id
+          this.fetchDataProduk(this.idProdukEdit)
+          console.log('Edit Produk')
+      }
       this.authenticationEndpoint = this.$api + '/Upload'
   },
   beforeCreate() {

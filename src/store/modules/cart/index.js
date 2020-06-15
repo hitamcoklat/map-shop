@@ -16,8 +16,8 @@ export default {
             return state.cartItem;
         },
         cartTotalAmount: (state) => {
-            return state.cart.reduce((total, product) => {
-                return total + (product.price * product.quantity);
+            return state.cartItem.reduce((total, product) => {
+                return total + (product.HARGA * product.quantity);
             }, 0);
         },
         toast: (state) => {
@@ -36,30 +36,33 @@ export default {
             state.products = productsPayload;
         },
         addToCart: (state, itemProduct) => {
-            console.log(itemProduct.nama_produk)
-            let found = state.cartItem.find(product => product.id_produk == itemProduct.id_produk)
+            console.log(itemProduct.NAMA_PRODUK)
+            let found = state.cartItem.find(product => product.ID == itemProduct.ID)
+            console.log(found)
             if(found) {
                 // found.quantity++
+                let satu = itemProduct.quantity * parseInt(itemProduct.HARGA);
+                state.total = state.total + satu;
                 found.quantity = itemProduct.quantity
-                state.total = itemProduct.quantity * parseInt(itemProduct.harga)
             } else {
+                let satu = itemProduct.quantity * parseInt(itemProduct.HARGA);
+                state.total = state.total + satu;
                 state.cartItem.push(itemProduct)
-                state.total = itemProduct.quantity * parseInt(itemProduct.harga)
-                // new Vue(itemProduct, 'totalPrice', itemProduct.quantity * parseInt(itemProduct.harga));
+                // new Vue(itemProduct, 'totalPrice', itemProduct.quantity * parseInt(itemProduct.HARGA));
             }
         },
         removeFromCart: (state, productId) => {
             //find the product in the products list
-            let product = state.cartItem.find((product) => product.id_produk === productId);
+            let product = state.cartItem.find((product) => product.ID === productId);
             product.quantity--;
-            state.total = product.quantity * parseInt(product.harga)
+            state.total = product.quantity * parseInt(product.HARGA)
             if(product.quantity <= 0) {
-                let cartProductIndex = state.cartItem.findIndex((product) => product.id_produk === productId);                
+                let cartProductIndex = state.cartItem.findIndex((product) => product.ID === productId);                
                 state.cartItem.splice(cartProductIndex, 1);
             }
         },
         deleteFromCart: (state, productId) => {
-            let cartProductIndex = state.cartItem.findIndex((product) => product.id_produk === productId);
+            let cartProductIndex = state.cartItem.findIndex((product) => product.ID === productId);
             state.cartItem.splice(cartProductIndex, 1);
         },
         showToast: (state, toastText) => {
