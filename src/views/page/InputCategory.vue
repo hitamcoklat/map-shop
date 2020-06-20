@@ -57,19 +57,19 @@ export default {
             },            
             trapFocus: true,
             cancelText: 'Hapus Kategori',
-            onCancel: () => {
-                console.log('hapus kategori')
-                console.log(item)
-                this.$http.post(this.$api + '/category/hapusCategory?id=' + item.ID + '&email=' + this.$store.getters.getUser.EMAIL + '&token=' + this.$store.getters.getUser.TOKEN + '&u=' + this.$store.getters.getUser.USERNAME)
-                .then((res) => {
-                        console.log(res)
-                        if(res.data.status == true) {
-                            this.$buefy.dialog.alert('Kategori berhasil di hapus!')
-                            this.fetchData(this.$store.getters.getUser.USERNAME)
-                        } else {
-                            this.$buefy.dialog.alert('Terjadi kesalahan!')
-                        }
-                    })                 
+            onCancel: (e) => {
+                if(e == 'button') {
+                    this.$http.post(this.$api + '/category/hapusCategory?id=' + item.ID + '&email=' + this.$store.getters.getUser.EMAIL + '&token=' + this.$store.getters.getUser.TOKEN + '&u=' + this.$store.getters.getUser.USERNAME)
+                    .then((res) => {
+                            console.log(res)
+                            if(res.data.status == true) {
+                                this.$buefy.dialog.alert('Kategori berhasil di hapus!')
+                                this.fetchData(this.$store.getters.getUser.USERNAME)
+                            } else {
+                                this.$buefy.dialog.alert('Terjadi kesalahan!')
+                            }
+                        })  
+                }               
             },
             confirmText: 'Update',
             onConfirm: (value) => {
@@ -86,13 +86,14 @@ export default {
       },
 
     updateCategorySubmit: function(item) {
+        this.isLoading = true
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         }        
         this.$http.post(this.$api + '/category/updateCategory', item, {
             headers: headers
         }).then((res) => {
-                console.log(res)
+                this.isLoading = false
                 if(res.data.status == true) {
                     this.$buefy.dialog.alert('Kategori berhasil di edit!')
                     this.fetchData(this.$store.getters.getUser.USERNAME)
@@ -108,6 +109,7 @@ export default {
             return this.$buefy.dialog.alert('Mohon isi kolom!')
         }
 
+        this.isLoading = true
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         }
@@ -121,7 +123,7 @@ export default {
             headers: headers
         })
             .then((res) => {
-                console.log(res)
+                this.isLoading = false
                 if(res.data.status == true) {
                     this.$buefy.dialog.alert('Kategori berhasil dibuat!')
                     this.form = []
@@ -132,8 +134,10 @@ export default {
             })        
     },
     fetchData: function(username) {
+        this.isLoading = true
         this.$http.get(this.$api + '/category/readCategory?u=' + username)
             .then((res) => {
+                this.isLoading = false
                 if(res.data.status == true) {
                     this.dataCategory = res.data.data;
                 }

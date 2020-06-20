@@ -68,7 +68,7 @@
     <div v-on:click="toCheckoutPage()" style="background-color: white; position: fixed; bottom: 0; z-index: 9999; width: 100%; border-top: 1px solid #ccc;" class="columns is-mobile is-gapless">
         <div class="column">
             <div style="padding: 10px;" class="">
-                <font-awesome-icon style="margin-right: 5px;" icon="cart-plus" /> Cart
+                <font-awesome-icon style="margin-right: 5px;" icon="cart-plus" /> <small>Keranjang</small>
             </div>
         </div>
         <div class="column">

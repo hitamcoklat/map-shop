@@ -18,7 +18,10 @@
                   </div>
                   <div class="media-content">
                       <p class="title is-4">{{namaToko}}</p>
-                      <p class="subtitle is-6">{{dataUser.NO_HP}}</p>
+                      <p class="subtitle is-6">
+                        <strong>Bio: </strong>
+                        <br />{{dataUser.ALAMAT}}
+                      </p>
                   </div>
                 </div>
 
@@ -33,10 +36,10 @@
         </div>
 
         <div style="overflow-y: auto; margin: 0 !important;" class="columns is-mobile">
-            <div style="text-align: center; padding-top: 1em; color: black; border: 1px solid #CCC; font-weight: bold; border-radius: 5px; margin-right: 10px;" @click="fetchData" class="column is-5">
+            <div v-bind:style="{backgroundColor: (selectedCategory == '') ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; border: 1px solid #CCC; font-weight: bold; border-radius: 5px; margin-right: 10px;" @click="fetchData" class="column is-5">
                 Semua
             </div>
-            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" v-bind:style="{backgroundColor: arrayColor[Math.floor(Math.random() * 9)]}" style="text-align: center; padding-top: 1em; color: white; font-weight: bold; border-radius: 5px; margin-right: 10px;" @click="getDataByCategory(item.ID)" class="column is-5">
+            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" v-bind:style="{backgroundColor: (item.ID == selectedCategory) ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; font-weight: bold; border-radius: 5px; margin-right: 10px; border: 1px solid #CCC;" @click="getDataByCategory(item.ID)" class="column is-5">
                 {{item.NAMA_KATEGORI}}
             </div>
         </div>                    
@@ -105,6 +108,7 @@ export default {
     dataUser: [],
     btnKelolaToko: false,
     dataCategory: [],
+    selectedCategory: '',
     email: '',
     linkToko: '',
     arrayColor: ['#00d1b2', '#00a8a7', '#18b285', '#683882', '#3d67a9', '#00a3b4', '#462066', '#f88379', '#00659d']    
@@ -112,15 +116,20 @@ export default {
   methods: {
 
       getDataByCategory: function(id) {
+        this.isLoading = true
         this.$http.get(this.$api + '/api/readProdukByCat?u=' + this.namaToko + '&id=' + id)
             .then((res) => {
+              this.isLoading = false
+              this.selectedCategory = id
               this.dataProduk = res.data.data;
             })            
       },
 
       fetchDataCategory: function(username) {
+          this.isLoading = true
           this.$http.get(this.$api + '/category/readCategory?u=' + username)
               .then((res) => {
+                  this.isLoading = false
                   if(res.data.status == true) {
                       this.dataCategory = res.data.data;
                   }
@@ -137,6 +146,7 @@ export default {
                     onConfirm: () => this.$router.push('/')
                 })            
               } else {
+                this.selectedCategory = ''
                 this.isLoading = false
                 this.dataProduk = res.data.data;
               }

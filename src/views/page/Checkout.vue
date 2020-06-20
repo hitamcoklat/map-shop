@@ -242,7 +242,7 @@ export default {
   created() {
 
       if(this.$store.getters.cartSize <= 0) {
-          alert('Your cart is empty');
+          this.$buefy.dialog.alert('Keranjang anda masih kosong!')
           this.$router.push('/' + this.alias)
           return false;
       }
@@ -256,7 +256,7 @@ export default {
 
   updated() {
       if(this.$store.getters.cartSize <= 0) {
-          alert('Your cart is empty');
+          this.$buefy.dialog.alert('Keranjang anda masih kosong!')
           this.$router.push('/' + this.alias)
       }
       this.listProduk = this.$store.getters.getCart;  

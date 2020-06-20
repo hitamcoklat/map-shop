@@ -2,10 +2,14 @@
     <div style="max-width: 450px;" class="container">
         <navbar-user />
             <div>
-                <img
-                    src="https://ik.imagekit.io/igtoko/104410973_1525988394248123_1059615336302501060_n_kcDTkqJp8.jpg"
-                    alt="asdas"
-                >              
+            <b-carousel>
+                <b-carousel-item>
+                    <img alt="satu" src="https://ik.imagekit.io/igtoko/104410973_1525988394248123_1059615336302501060_n_kcDTkqJp8.jpg">
+                </b-carousel-item>
+                <b-carousel-item>
+                    <img alt="dua" src="https://ik.imagekit.io/igtoko/104717929_869972033526274_5116702397748313616_n_HH0Xx-9Qv7.jpg">
+                </b-carousel-item>
+            </b-carousel>             
             </div>
             <div style="margin-top: 2em;" class="card-columns  columns-6-xl columns-5-lg columns-4-md columns-3-sm ">
 

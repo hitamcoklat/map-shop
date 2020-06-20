@@ -14,7 +14,9 @@
                     </div>
                     <div class="media-content">
                         <p class="title is-4">{{username}}</p>
-                        <p class="subtitle is-6">{{email}}</p>
+                        <p class="subtitle is-6"><strong>URL Toko:</strong> <br />
+                            <a :href="'http://igtoko.com/' + this.$store.getters.getUser.USERNAME">http://igtoko.com/{{this.$store.getters.getUser.USERNAME}}</a>
+                        </p>
                     </div>
                     </div>
 

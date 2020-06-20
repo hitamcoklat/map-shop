@@ -192,6 +192,8 @@ export default {
 
     submitProduk: function() {
 
+        this.isLoading = true
+
         let data = {
             COVER_IMAGE: this.coverImage,
             LOGO_IMAGE: this.logoImage,
@@ -207,6 +209,9 @@ export default {
         this.$http.post(this.$api + '/api/submitConfig', data, {
             headers: headers
         }).then((res) => {
+            
+            this.isLoading = false
+
             if(res.data.status == true) {
                 this.$buefy.dialog.alert('Toko berhasil di update!')
             } else {
@@ -215,6 +220,7 @@ export default {
                     message: 'Terjadi kesalahan!'
                 })            
             }
+            
         })        
 
     },

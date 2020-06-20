@@ -19,6 +19,7 @@
             </div>
 
         </section>
+        <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
     </div>
 </template>
 
@@ -33,10 +34,12 @@ export default {
     isShowModal: false,
     emailUsername: false,
     form: [],
+    isLoading: false,
     dataUser: []
   }),
   methods: {
       submitToko: function() {    
+        this.isLoading = true;
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         }
@@ -48,6 +51,7 @@ export default {
                 headers: headers
             })
                 .then((res) => {
+                    this.isLoading = true;
                     if(res.data.status == true) {
                         let data = {
                             USERNAME: res.data.data.USERNAME, 
