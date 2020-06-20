@@ -9,7 +9,10 @@ const routes = [
     path: '/:alias',
     name: 'Home',
     props: true,
-    component: Home
+    component: Home,
+    meta: {
+      title: 'Nested - About Page - Example App'
+    }    
   },
   {
     path: '/about',
@@ -50,6 +53,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/page/InputProduk.vue')
   },
   {
+    path: '/p/input-category',
+    name: 'InputCategory',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/InputCategory.vue')
+  },
+  {
     path: '/p/list-produk',
     name: 'ListProduk',
     component: () => import(/* webpackChunkName: "about" */ '../views/page/ListProduk.vue')
@@ -58,6 +66,11 @@ const routes = [
     path: '/p/list-order',
     name: 'ListOrder',
     component: () => import(/* webpackChunkName: "about" */ '../views/page/ListOrder.vue')
+  },
+  {
+    path: '/p/price-list',
+    name: 'PriceList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/page/PriceList.vue')
   },
   {
     path: '/p/faq',
@@ -84,7 +97,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes
 })
 

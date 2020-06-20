@@ -1,7 +1,7 @@
 <template>
 <div>
   <div style="max-width: 500px;" class="container">
-    <navbar-user />
+    <NavbarUser v-bind:alias="alias" />
     <br clear="all" />
     <h1 class="" style="text-align: center; font-weight: bold; font-size: 1.2em;">CHECKOUT</h1>
     <br />      
@@ -134,7 +134,7 @@ export default {
   props: ['alias'],
   components: {
     'footer-component': Footer,
-    'navbar-user': NavbarUser
+    NavbarUser
   },
   data: () => ({
       listProduk: [],
@@ -155,7 +155,6 @@ export default {
     },
 
     removeCart: function(id) {
-        console.log(id)
         this.$store.commit('removeFromCart', id)
         // this.$store.commit('resetCart');
         const { cart } = this.$store.state;
@@ -167,13 +166,10 @@ export default {
         this.$http.get(this.$api + '/api/getUserByUsername?u=' + username)
             .then((res) => {
                 this.dataUser = res.data.data;
-                console.log(res)
             })
     },      
 
     submitPesanan: function() {
-
-        console.log(this.form)
         
         const { cart } = this.$store.state;
         
@@ -198,7 +194,6 @@ export default {
             headers: headers
         })
             .then((res) => {
-                console.log(res)
                 if(res.data.status == true) {
                     this.kirimWhatsapp()
                     this.$store.commit('resetCart');
@@ -222,17 +217,16 @@ export default {
 
         let dataKirim = '';
         let dataProduk = this.$store.state.cart.cartItem;
-            Object.keys(dataProduk).forEach((key) => {
-                dataKirim += '----------------------%0A';
-                dataKirim += 'Nama Produk: ' + dataProduk[key].NAMA_PRODUK + '%0A';
-                dataKirim += 'Harga: Rp' + dataProduk[key].HARGA + '%0A';
-                dataKirim += 'Qty: ' + dataProduk[key].quantity + '%0A';
-                dataKirim += '----------------------%0A';
-            })
 
-        parameter = urlWa + '?phone=' + no_hp + '&text=Halo Admin Toko *' + this.alias + '*, saya *'+this.form.NAMA_LENGKAP+'*, %0A mau pesan: %0A '+dataKirim+'*Atas nama:* %0A' + this.form.NAMA_LENGKAP +', %0A*E-mail:* %0A'+this.form.EMAIL;
+        Object.keys(dataProduk).forEach((key) => {
+            dataKirim += '-----------------------------%0A';
+            dataKirim += 'Nama Produk: ' + dataProduk[key].NAMA_PRODUK + '%0A';
+            dataKirim += 'Harga: Rp' + dataProduk[key].HARGA + '%0A';
+            dataKirim += 'Qty: ' + dataProduk[key].quantity + '%0A';
+            dataKirim += '-----------------------------%0A';
+        })
 
-        console.log(parameter)
+        parameter = urlWa + '?phone=' + no_hp + '&text=Halo Admin Toko *' + this.alias + '*, saya *'+this.form.NAMA_LENGKAP + '*, %0A mau pesan: %0A '+dataKirim+ '*Atas nama:* %0A' + this.form.NAMA_LENGKAP + ', %0A*E-mail:* %0A'+this.form.EMAIL + ', %0A*Alamat:* %0A'+this.form.ALAMAT + ', %0A*KODE POS:* %0A'+this.form.KODE_POS + ', %0A*CATATAN:* %0A' + this.form.CATATAN;
 
         var w = 960,
             h = 540,

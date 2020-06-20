@@ -1,6 +1,6 @@
 <template>
     <div style="max-width: 500px;" class="container">
-        <navbar-user />
+        <NavbarUser />
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" style="padding-left: 1em; padding-right: 1em;" class="container">
 
             <div v-for="(item, index) in dataProduk" :key="index" :ref="index" style="margin-top: 1em;" class="card">
@@ -41,7 +41,7 @@ import { requestServer } from "@/api";
 export default {
   name: 'ListProduk',
   components: {
-    'navbar-user': NavbarUser
+    NavbarUser
   },
   data: () => ({
       dataProduk: [],
@@ -61,7 +61,6 @@ export default {
           let username = this.$store.getters.getUser.USERNAME;
           const response = await requestServer(this.$api + '/api/getAllProdukByUsername?u=' + username + '&page=' + page, 'get')
           this.dataProduk = response.data.data;
-          console.log(this.dataProduk)
       },
       editProduk: function (id) {
           this.$router.push({name: 'InputProduk', params: { id: id }})

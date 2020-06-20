@@ -1,16 +1,21 @@
 <template>
 <div>
   <div style="max-width: 500px;" class="container">
-    <navbar-user />
+    <NavbarUser v-bind:alias="alias" />
     <div style="margin-bottom: 2.5em;" v-for="item in dataProduk" :key="item.ID" :ref="item.ID" class="column" :id="item.SLUG">
         <b-carousel>
             <b-carousel-item v-for="(carousel, i) in item.IMAGES" :key="i">
-                <img :alt="item.NAMA_PRODUK" v-bind:src="carousel.img">
+                <img :alt="item.NAMA_PRODUK" v-lazy="carousel.img">
             </b-carousel-item>
         </b-carousel>                
         <div style="padding-left: 1em; padding-right: 1em;">
             <p style="font-weight: normal;">{{item.NAMA_PRODUK}}</p>
-            <p style="font-weight: bold;">Rp {{formatPrice(item.HARGA)}}</p>
+            <p>
+                <span v-if="item.HARGA_CORET != null" style="margin-right: 10px;">
+                <font style="font-weight: normal; text-decoration: line-through;">Rp {{formatPrice(item.HARGA_CORET)}}</font>
+                </span>
+                <font style="font-weight: bold;">Rp {{formatPrice(item.HARGA)}}</font>
+            </p>
             <p style="border-top: 1px dashed #ccc; padding-top: 1em; margin-top: 1em;" v-html="item.CAPTION"></p>
             <button style="width: 100%; margin-top: 10px;" v-on:click="popBeli(item)" class="button is-info">
                 <font-awesome-icon style="margin-right: 5px;" icon="cart-plus" /> Beli
@@ -76,7 +81,8 @@
                 {{jmlProduk}} Produk
             </div>
         </div>
-    </div>    
+    </div>  
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>     
 </div>
 </template>
 <script>
@@ -88,7 +94,7 @@ export default {
   name: 'DetailProduk',
   props: ['slug', 'alias'],
   components: {
-    'navbar-user': NavbarUser
+    NavbarUser
   },  
   data: () => ({
     isShowModal: false,
@@ -97,6 +103,7 @@ export default {
     quantity: 1,
     selectedProduk: [],
     jmlProduk: 0,
+    isLoading: false,
     user: ''
   }),
   methods: {
@@ -121,9 +128,10 @@ export default {
     },
 
     fetchData: async function() {
+        this.isLoading = true
         const response = await requestServer(this.$api + '/api/getAllProduk?user=' + this.user, 'get')
+        this.isLoading = false
         this.dataProduk = response.data.data;
-        console.log(this.dataProduk)
     },
 
     popBeli: function(item) {
@@ -134,10 +142,17 @@ export default {
 
     addToCart: function() {
         this.selectedProduk.quantity = this.quantity;
-        console.log(this.selectedProduk)
         this.$store.commit('addToCart', this.selectedProduk);
         this.isCardModalActive = false;
         this.jmlProduk = this.$store.getters.cartSize;
+
+        // dialog lanjut belanja?
+        this.$buefy.dialog.confirm({
+            message: 'Produk berhasil dimasukan ke keranjang.',
+            confirmText: 'Checkout',
+            cancelText: 'Lanjut Belanja',
+            onConfirm: () => this.$router.push('/' + this.alias + '/checkout')
+        })        
     }    
 
   },

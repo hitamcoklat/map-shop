@@ -10,13 +10,32 @@
                 v-model="form.nama_produk" 
                 placeholder="Nama Produk..."></b-input>
         </b-field>
-        <b-field label="Harga">
+        <b-field label="Kategori Produk">
+            <b-select
+                placeholder="Pilih Kategori"
+                icon="globe"
+                icon-pack="fas"
+                v-model="form.id_kategori"
+                expanded>
+                <option v-for="(item, index) in dataCategory" :key="index" :ref="index" :value="item.ID">{{item.NAMA_KATEGORI}}</option>
+            </b-select>
+        </b-field>        
+        <b-field label="Harga Asli">
             <b-input
                 icon-pack="fas"
                 icon="tags"             
                 type="number" 
                 v-model="form.harga" 
                 placeholder="Masukan harga"></b-input>
+        </b-field>
+        <b-field label="Harga Coret">
+            <b-input
+                icon-pack="fas"
+                icon="tags"             
+                type="number" 
+                v-model="form.hargaCoret"
+                placeholder="Masukan harga coret jika ada"></b-input>
+                Masukan harga coret jika ada.
         </b-field>
         <b-field label="Deskripsi">
             <b-input v-model="form.caption" type="textarea"></b-input>
@@ -91,7 +110,8 @@ export default {
     fotoProduk: [],
     isLoading: false,
     isUpdate: false,
-    idProdukEdit: ""
+    idProdukEdit: "",
+    dataCategory: []
   }),
   methods: {
 
@@ -105,28 +125,41 @@ export default {
             authenticationEndpoint : this.authenticationEndpoint
         });
 
-        var file = document.getElementById("file1");
         imagekit.upload({
             file : this.$refs.imageFile.files[0],
             fileName : "igtoko.jpg",
-            tags : ["tag1"]
+            tags : [this.$store.getters.getUser.USERNAME]
         }, (err, result) => {
             this.isLoading = false;
             let dataImage = {
                 thumb: result.thumbnailUrl,
-                img: result.url
-            }            
+                img: result.url,
+                fileId: result.fileId
+            }
             this.fotoProduk.push(dataImage)
         })        
 
     },
 
+    fetchDataCategory: function(username) {
+        this.$http.get(this.$api + '/category/readCategory?u=' + username)
+            .then((res) => {
+                if(res.data.status == true) {
+                    this.dataCategory = res.data.data;
+                }
+            })           
+    },    
+
     submitProduk: function() {
+
+        this.isLoading = true;
 
         let data = {
             IMAGES: this.fotoProduk,
             NAMA_PRODUK: this.form.nama_produk,
             HARGA: this.form.harga,
+            ID_KATEGORI: this.form.id_kategori,
+            HARGA_CORET: this.form.hargaCoret,
             CAPTION: this.form.caption,
             BERAT: this.form.berat,
             USERNAME: this.$store.getters.getUser.USERNAME,
@@ -150,11 +183,14 @@ export default {
                 this.form = {
                     nama_produk: '',
                     harga: '',
+                    hargaCoret: '',
+                    id_kategori: '',
                     caption: '',
                     berat: ''
                 };
                 this.fotoProduk = []
-                alert('Produk berhasil di tambahkan!')
+                this.isLoading = false;
+                this.$buefy.dialog.alert('Produk berhasil ditambahkan!')
             } else {
                 alert('Terjadi kesalahan!')
             }
@@ -166,6 +202,11 @@ export default {
         this.$buefy.dialog.confirm({
             message: 'Apakah anda yakin ingin menghapus foto ini?',
             onConfirm: () => {
+                if(typeof this.fotoProduk[id].fileId !== 'undefined') {
+                    this.$http.get(this.$api + '/upload/deleteImage?q=' + this.fotoProduk[id].fileId)
+                        .then((res) => {
+                        })                      
+                }              
                 this.fotoProduk.splice(index)
                 this.$buefy.toast.open({
                     message: `Foto berhasil dihapus`,
@@ -181,15 +222,15 @@ export default {
         
         this.$http.get(this.$api + '/api/getProdukById?id=' + id + '&u=' + u)
             .then((res) => {
-                console.log(res)
                 this.form = {
                     nama_produk: res.data.data.NAMA_PRODUK,
                     berat: res.data.data.BERAT,
                     caption: res.data.data.CAPTION,
-                    harga: res.data.data.HARGA
+                    harga: res.data.data.HARGA,
+                    id_kategori: res.data.data.ID_KATEGORI,
+                    hargaCoret: res.data.data.HARGA_CORET
                 }
                 this.fotoProduk = res.data.data.IMAGES;
-                console.log(this.form)
             })
 
     },
@@ -198,7 +239,6 @@ export default {
     },
     onSuccess(res) {
         this.fotoProduk.push(res)        
-        console.log(res)
     },
     onError(err) {
         console.log(err)
@@ -218,6 +258,7 @@ export default {
           this.fetchDataProduk(this.idProdukEdit)
           console.log('Edit Produk')
       }
+      this.fetchDataCategory(this.$store.getters.getUser.USERNAME)
       this.authenticationEndpoint = this.$api + '/Upload'
   },
   beforeCreate() {

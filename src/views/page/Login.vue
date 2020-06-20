@@ -12,10 +12,10 @@
             </b-field>
 
             <div style="margin-top: 2em;" class="buttons">
-                <b-button size="is-medium" v-on:click="submitToko" type="is-primary" expanded>Masuk</b-button>
+                <b-button size="is-medium" v-on:click="submitToko" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Masuk</b-button>
             </div>
             <div style="margin-top: 2em;" class="buttons">
-                <b-button size="is-small" v-on:click="submitToko" type="is-text" tag="router-link" :to="{ path: '/p/buat-toko' }" expanded>Buat Toko Baru</b-button>
+                <b-button size="is-medium" v-on:click="submitToko" type="is-text" tag="router-link" :to="{ path: '/p/buat-toko' }" expanded>Buat Toko Baru</b-button>
             </div>
 
         </section>

@@ -19,8 +19,11 @@
                 v-model="no_hp" 
                 placeholder="Nomor Whatsapp"></b-input>
         </b-field>
-        <b-field label="Alamat Toko">
+        <b-field label="Bio Toko">
             <b-input v-model="alamat" type="textarea"></b-input>
+        </b-field>
+        <b-field label="Ganti Password">
+            <b-button @click="popUpGantiPass" type="is-info" size="is-small">Klik Untuk Ganti Password</b-button>
         </b-field>
         <div v-if="coverImage !== ''" style="width: 100%;">
             <p>Cover Image</p>
@@ -29,7 +32,15 @@
         <div v-if="logoImage !== ''" style="width: 100%;">
             <p>Logo Image</p>
             <img :alt="logoImage" v-bind:src="logoImage">
-        </div>                 
+        </div> 
+        <b-field label="Keterangan">
+            <p>
+                <ol style="margin-left: 1em;">
+                    <li>Ukuran Cover disarankan berbentuk kotak/square</li>
+                    <li>Ukuran Logo disarankan berbentuk Persegi Panjang ukuran 300px * 100px</li>
+                </ol>
+            </p>
+        </b-field>                        
         <div style="margin-top: 2em; padding-left: 0.6em; padding-right: 0.6em;" class="columns is-multiline is-mobile">
             <div style="text-align: center; width: 50%; height: 100%; background-color: #ebfffc; color: #00947e; border: 1px solid #FFF;" class="column is-half">
                 <div class="file is-boxed">
@@ -100,13 +111,50 @@ export default {
     namaToko: '',
     alamat: '',
     no_hp: '',
+    passBaru: '',
     isLoading: false  
   }),
   methods: {
 
-    handleUpload: function (jenis) {
+    popUpGantiPass: function() {
 
-        console.log(jenis)
+        this.$buefy.dialog.prompt({
+            message: `Masukan password baru anda.`,
+            inputAttrs: {
+                placeholder: 'Input Password Baru...',
+                maxlength: 100
+            },
+            trapFocus: true,
+            onConfirm: (value) => {
+
+                let data = {
+                    PASSBARU: value,
+                    EMAIL: this.$store.getters.getUser.EMAIL,
+                    TOKEN: this.$store.getters.getUser.TOKEN
+                }
+
+                const headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                }
+
+                this.$http.post(this.$api + '/api/changePassword', data, {
+                    headers: headers
+                }).then((res) => {
+                    if(res.data.status == true) {
+                        this.$buefy.toast.open({
+                            message: `Password berhasil di update!`,
+                            position: 'is-bottom'
+                        })
+                    } else {
+                        alert('Terjadi kesalahan!')
+                    }
+                })                  
+            }
+        })
+
+    },
+
+    handleUpload: function (jenis) {
 
         this.isLoading = true;
 
@@ -124,8 +172,7 @@ export default {
                 fileName : "igtoko.jpg",
                 tags : ["tag1"]
             }, (err, result) => {
-                console.log(err)
-                console.log(result)
+
                 this.isLoading = false;
 
                 if(jenis == 'cover') {
@@ -176,10 +223,8 @@ export default {
     },
     onSuccess(res) {
         this.fotoProduk.push(res)        
-        console.log(res)
     },
     onError(err) {
-        console.log(err)
     },
     onProcess() {
         // console.log(e)
@@ -193,7 +238,6 @@ export default {
             this.alamat = res.data.data.ALAMAT
             this.coverImage = res.data.data.COVER_IMAGE
             this.logoImage = res.data.data.LOGO_IMAGE
-            console.log(res)
         })
     }
   },
