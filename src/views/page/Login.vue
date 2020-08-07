@@ -51,7 +51,7 @@ export default {
                 headers: headers
             })
                 .then((res) => {
-                    this.isLoading = true;
+                    this.isLoading = false;
                     if(res.data.status == true) {
                         let data = {
                             USERNAME: res.data.data.USERNAME, 

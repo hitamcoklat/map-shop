@@ -42,17 +42,24 @@ export default {
       dataUser: []
   }),
   methods: {
-      doLogout: function () {
-          this.$store.commit('resetUser');
-          this.$buefy.dialog.alert('Anda berhasil keluar!')
-          this.$router.push('/p/login')
-      },
+        doLogout: function () {
+            this.$store.commit('resetUser');
+            this.$buefy.dialog.alert('Anda berhasil keluar!')
+            this.$router.push('/p/login')
+        },
         tentangDialog() {
+            this.$emit('tentangDialog', true)
             this.$buefy.dialog.confirm({
                 title: 'Tentang IGtoko.com',
                 message: `Marketplace dan Website sudah banyak digunakan oleh para "Pebisnis Online" sejak 2017 - saat inim baik UMKM maupun Personal Seller. <b>IGToko</b> didesain khusus bagi penjual online di Indonesia baik untuk penjualan Produk Fisik, Virtual maupun Jasa.<br><br>Tampilan <b>IGToko.com</b> cocok digunakan untuk pembeli lokal +62 (Indonesia), dimana pengguna lebih senang membeli langsung melalui WhatsApp ketimbang menggunakan proses checkout yang ribet!.<br><br>Dikembangkan oleh <a href="https://instagram.com/septiandwia">Septian Dwi Anugrah</a>`,
                 type: 'is-success',
-                animation: 'zoom-out'
+                animation: 'zoom-out',
+                onCancel: () => {
+                    this.$emit('tentangDialog', false)
+                },
+                onConfirm: () => {
+                    this.$emit('tentangDialog', false)
+                }
             }) 
         },
         fetchDataUser: function(username) {

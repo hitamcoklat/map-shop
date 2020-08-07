@@ -1,43 +1,72 @@
 <template>
-    <div style="max-width: 450px;" class="container">
-        <navbar-user />
-            <div>
-            <b-carousel>
-                <b-carousel-item>
-                    <img alt="satu" src="https://ik.imagekit.io/igtoko/104410973_1525988394248123_1059615336302501060_n_kcDTkqJp8.jpg">
-                </b-carousel-item>
-                <b-carousel-item>
-                    <img alt="dua" src="https://ik.imagekit.io/igtoko/104717929_869972033526274_5116702397748313616_n_HH0Xx-9Qv7.jpg">
-                </b-carousel-item>
-            </b-carousel>             
-            </div>
-            <div style="margin-top: 2em;" class="card-columns  columns-6-xl columns-5-lg columns-4-md columns-3-sm ">
+    <div>
+            <div style="position: relative;">
+              <navbar-user style="max-width: 450px; position: fixed; margin-left: auto; margin-right: auto; left: 0; right: 0;" @tentangDialog="tentangDialog" />
+              <l-map
+                :zoom="zoom"
+                :center="center"
+                :options="mapOptions"
+                style="height: 93vh; z-index: 1; top: 55px;"
+                @update:center="centerUpdate"
+                @update:zoom="zoomUpdate"
+              >
+                <l-circle
+                  :lat-lng="center"
+                  :radius="circle.radius"
+                />               
+                <l-tile-layer
+                  :url="url"
+                  :attribution="attribution"
+                />               
+                <l-marker
+                  :lat-lng="center"
+                  :icon="iconPerson"
+                >   
+                </l-marker>                
+                <l-marker
+                  v-for="(item, index) in arrayMarker"
+                  :key="'marker-' + index"
+                  :lat-lng="item.lokasiTempat"
+                  :icon="icon"
+                >
+                  <l-tooltip :options="{ permanent: true, interactive: true }">
+                    <div @click="innerClick(item)">
+                      <strong>@{{item.usernameToko}}</strong>
+                    </div>
+                  </l-tooltip>      
+                </l-marker>
+                <footer
+                  style="color: white;
+                        position: fixed;
+                        text-align: center;
+                        margin-left: auto;
+                        margin-right: auto;
+                        left: 0;
+                        right: 0;
+                        bottom: 10px;
+                        max-width: 450px;
+                        z-index: 9999;">
+                  <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
+                    <div class="buttons">
+                        <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
+                    </div>          
+                  </div>
+                </footer>                                
+              </l-map>                         
+            </div>        
+        <b-modal
+          style="z-index: 9999;" 
+          :active.sync="isComponentModalActive"
+          has-modal-card
+          trap-focus
+          :destroy-on-hide="false"
+          :on-cancel="tutupModal"
+          aria-role="dialog"
+          aria-modal>
+          <modal-toko v-bind:dataToko="dataToko"></modal-toko>
+        </b-modal>           
 
-                <div style="padding: 5px;" v-for="(item, index) in fotoProduk" :key="index" :ref="index" v-on:click="toShop(item.USERNAME)" class="card card-content">
-                    <img style="width: 100%;" :alt="item.USERNAME" v-lazy="item.COVER_IMAGE">
-                    {{item.USERNAME}}
-                </div>
-
-            </div>
-            <br />
-            <br />
-            <br />
-            <br />
-      <footer style="  position: fixed;
-  bottom: 0;
-  width: 100%;
-  color: white;
-  text-align: center;
-  padding: 1em;
-  max-width: 450px;
-  ">
-        <div class="content has-text-centered">
-          <div class="buttons">
-              <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
-          </div>          
-        </div>
-      </footer>
-      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>          
+      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>           
     </div>
 </template>
 <style scoped>
@@ -155,11 +184,31 @@
 }
 </style>
 <script>
+import { latLng } from "leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LCircle, LIcon } from "vue2-leaflet";
+import { Icon } from 'leaflet';
 import NavbarUser from './page/_NavbarUser'
+import ModalToko from './ModalToko'
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
 export default {
   name: 'HomeLandingPage',
   components: {
-    'navbar-user': NavbarUser
+    'navbar-user': NavbarUser,
+    LMap,
+    LTileLayer,
+    LMarker,
+    LPopup,
+    LTooltip,
+    ModalToko,
+    LCircle,
+    LIcon
   },
   metaInfo: {
     title: 'IGtoko',
@@ -170,11 +219,42 @@ export default {
     }
   },  
   data: () => ({
+    icon: L.icon({
+      iconUrl: 'https://ik.imagekit.io/igtoko/icons8-shop-100_2__AxYVUrSjrv.png',
+      iconSize: [36, 41],
+      iconAnchor: [24, 20]
+    }), 
+    iconPerson: L.icon({
+      iconUrl: 'https://ik.imagekit.io/igtoko/icons8-street-view-100_o3F2JOLnMBb.png',
+      iconSize: [36, 41],
+      iconAnchor: [10, 20]
+    }), 
+    iconSize: 64,   
+    isComponentModalActive: false,
+    dataToko: [],    
     isShowModal: false,
     form: [],
     isLogin: false,
     isLoading: false,
-    fotoProduk: []
+    fotoProduk: [],
+    btnKDaftarToko: true,
+    zoom: 8,
+    center: latLng(-6.9005281, 107.5985346),
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution:
+      '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    withPopup: latLng(-6.9005281, 107.5985346),
+    withTooltip: latLng(47.41422, -1.250482),
+    currentZoom: 11.5,
+    currentCenter: latLng(-6.9005281, 107.5985346),
+    showParagraph: false,
+    arrayMarker: [],
+    mapOptions: {
+      zoomSnap: 0.5
+    },
+    circle: {
+      radius: 4500
+    },       
   }),
   methods: {
       toPendaftaran: function() {
@@ -184,27 +264,86 @@ export default {
         this.isLoading = true
         this.$http.get(this.$api + '/api/getListToko/')
             .then((res) => {
+              console.log(res)
+              this.arrayMarker = []
               this.isLoading = false
               this.fotoProduk = res.data.data
-              this.fotoProduk.forEach((item, index) => {
+              this.fotoProduk.forEach((item, index) => {             
                 if(this.fotoProduk[index]['COVER_IMAGE'] == null) {
                   this.fotoProduk[index]['COVER_IMAGE'] = 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG'
                 }
+                this.arrayMarker.push({
+                  lokasiTempat: latLng({
+                    lat: item.LATITUDE, lng: item.LONGITUDE
+                  }),
+                  usernameToko: item.USERNAME,
+                  imageCover: item.COVER_IMAGE,
+                  bioToko: item.ALAMAT
+                })                  
               })
             })          
       },
+      tutupModal: function() {
+        console.log('Modal di tutup')
+        if(this.$store.getters.getLoginStatus == true) {
+          this.isLogin = true
+          this.btnKDaftarToko = false
+        }else {
+          this.btnKDaftarToko = true
+        }
+      },
+      onResize() {
+        this.$refs.map.mapObject._onResize();
+      },       
       toShop: function(username) {
           this.$router.push('/' + username)
       },
       toRegisterPage: function() {
           this.$router.push('/p/price-list')
-      }
+      },
+      zoomUpdate(zoom) {
+        this.currentZoom = zoom;
+      },
+      centerUpdate(center) {
+        this.currentCenter = center;
+      },
+      showLongText() {
+        this.showParagraph = !this.showParagraph;
+      },
+      tentangDialog: function(value) {
+        console.log(value)
+        if(this.$store.getters.getLoginStatus == true) {
+            this.isLogin = true
+            this.btnKDaftarToko = false
+        } else {
+          this.btnKDaftarToko = !value
+        }        
+      },
+      innerClick(item) {
+        console.log(item)
+        this.dataToko = item;
+        this.isComponentModalActive = true
+        this.btnKDaftarToko = false
+      }      
   },
   created() {
-      if(this.$store.getters.getLoginStatus == true) {
-          this.isLogin = true
-      }
-      this.fetchData()
+    this.$getLocation({
+      enableHighAccuracy: true, //defaults to false
+      timeout: Infinity, //defaults to Infinity
+      maximumAge: 0 //defaults to 0
+    }).then(coordinates => {
+        console.log(coordinates);
+        this.center = latLng({ lat: coordinates.lat, lng: coordinates.lng })
+        this.currentCenter = latLng({ lat: coordinates.lat, lng: coordinates.lng })
+        this.withTooltip = latLng({ lat: coordinates.lat, lng: coordinates.lng })
+    });
+
+    if(this.$store.getters.getLoginStatus == true) {
+        this.isLogin = true
+        this.btnKDaftarToko = false
+        this.btnKelolaToko = true
+    }
+    this.fetchData()
   } 
 }
 </script>

@@ -60,7 +60,15 @@ export default {
       fetchData: async function(page = 1) {
           let username = this.$store.getters.getUser.USERNAME;
           const response = await requestServer(this.$api + '/api/getAllProdukByUsername?u=' + username + '&page=' + page, 'get')
-          this.dataProduk = response.data.data;
+          if(response.data.status == false) {
+            this.$buefy.dialog.confirm({
+                message: 'Produk masih kosong!',
+                confirmText: 'Tambahkan Produk',
+                onConfirm: () => this.$router.push('/p/input-produk'),
+                onCancel: () => this.$router.push('/p/manage')
+            })              
+          }
+          this.dataProduk = response.data.data;          
       },
       editProduk: function (id) {
           this.$router.push({name: 'InputProduk', params: { id: id }})

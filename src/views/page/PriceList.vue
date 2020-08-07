@@ -18,8 +18,9 @@
 
                     <div class="content">
                         <ol>
-                            <li>Coba Gratis selama 14 hari</li>
+                            <!-- <li>Coba Gratis selama 14 hari</li> -->
                             <li>Gratis Update</li>
+                            <li>Produk Unlimited</li>
                             <li>Dapat Link Toko <strong>(http://igtoko.com/toko-anda)</strong></li>
                         </ol>
                     <br>
@@ -29,7 +30,7 @@
                 </div>
             </div>  
         </div>       
-        <div class="card">
+<!--         <div class="card">
             <div class="card-content">
                 <div class="media">
                     <div class="media-left">
@@ -58,7 +59,7 @@
                     </div>                     
                 </div>
             </div>  
-        </div>       
+        </div>        -->
 <!--         <div class="card">
             <div class="card-content">
                 <div class="media">

@@ -17,11 +17,13 @@
             </b-button>
         </div>
         <p style="text-align: center; font-weight: bold; margin-bottom: 0.6em;">Daftar Kategori</p>
-        <div style="overflow-x: auto; max-height: 400px; padding-left: 0.7em; padding-right: 0.7em; padding-top: 1em;" class="columns">
-            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" style="background-color: #00d1b2; text-align: center; color: white; font-weight: bold; margin-top: 5px;" @click="clickEditPop(item)" class="column">
+        <div style="overflow-x: auto; max-height: 400px; padding-left: 0.7em; padding-right: 0.7em; padding-top: 1em;" class="columns is-multiline is-mobile">
+            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" style="background-color: #fff; border: 1px solid #a4a4a4; text-align: center; color: black; font-weight: bold; margin-top: 5px; -webkit-box-shadow: -3px 6px 0px 0px rgba(0,0,0,0.16);
+-moz-box-shadow: -3px 6px 0px 0px rgba(0,0,0,0.16);
+box-shadow: -3px 6px 0px 0px rgba(0,0,0,0.16); margin-top: 0.7em;" @click="clickEditPop(item)" class="column is-full">
                 {{item.NAMA_KATEGORI}}
             </div>
-        </div>        
+        </div>               
         <br />
         <br />
         <br />

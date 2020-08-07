@@ -10,11 +10,13 @@ import VueClipboard from 'vue-clipboard2'
 import vueHeadful from 'vue-headful';
 import VueLazyload from 'vue-lazyload'
 import VueGtag from "vue-gtag";
+import 'leaflet/dist/leaflet.css';
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight, faComments, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import infiniteScroll from 'vue-infinite-scroll'
+import VueGeolocation from 'vue-browser-geolocation';
 
 library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight, faComments, faGlobe);
 
@@ -29,7 +31,7 @@ Vue.use(Buefy, {
 Vue.use(VueGtag, {
   config: { id: "UA-170091620-1" }
 }, router);
-
+Vue.use(VueGeolocation);
 Vue.use(infiniteScroll)
 Vue.use(VueMeta, {
   // optional pluginOptions
@@ -39,7 +41,7 @@ Vue.use(VueClipboard)
 Vue.use(VueLazyload)
 Vue.config.productionTip = false
 
-// Vue.prototype.$api = 'http://192.168.0.111/project/igtoko';
+// Vue.prototype.$api = 'http://192.168.0.110/project/igtoko';
 Vue.prototype.$api = 'https://app.igtoko.com';
 Vue.prototype.$http = axios;
 

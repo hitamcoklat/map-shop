@@ -2,6 +2,16 @@
     <div style="max-width: 450px;" class="container">
     <navbar-user />
     <section style="padding-left: 1em; padding-right: 1em; padding-top: 1em;">
+        <b-modal
+          style="z-index: 9999;" 
+          :active.sync="isComponentModalActive"
+          has-modal-card
+          trap-focus
+          :destroy-on-hide="false"
+          aria-role="dialog"
+          aria-modal>
+          <modal-map @longlat="getLongLat"></modal-map>
+        </b-modal>
 
         <b-field label="Username/Nama Toko">
             <b-input 
@@ -21,6 +31,9 @@
         </b-field>
         <b-field label="Bio Toko">
             <b-input v-model="alamat" type="textarea"></b-input>
+        </b-field>
+        <b-field label="Lokasi Peta Toko">
+            <b-input v-model="longlat" @focus="popUpMap()" type="text"></b-input>
         </b-field>
         <b-field label="Ganti Password">
             <b-button @click="popUpGantiPass" type="is-info" size="is-small">Klik Untuk Ganti Password</b-button>
@@ -89,6 +102,8 @@
 import NavbarUser from './_NavbarUser'
 import ImageKit from 'imagekit-javascript';
 import { IKImage, IKContext, IKUpload } from "imagekitio-vue";
+import ModalMap from './ModalMap'
+
 let urlEndpoint= "https://ik.imagekit.io/igtoko";
 
 export default {
@@ -97,9 +112,11 @@ export default {
     'navbar-user': NavbarUser,
     IKImage,
     IKContext,
-    IKUpload    
+    IKUpload,
+    ModalMap
   },  
   data: () => ({
+    isComponentModalActive: false,
     isShowModal: false,
     form: [],
     file: null,
@@ -111,6 +128,7 @@ export default {
     namaToko: '',
     alamat: '',
     no_hp: '',
+    longlat: '',
     passBaru: '',
     isLoading: false  
   }),
@@ -193,13 +211,17 @@ export default {
     submitProduk: function() {
 
         this.isLoading = true
+        var dataLongLat = this.longlat
+        var longlat = dataLongLat.split(",")
 
         let data = {
             COVER_IMAGE: this.coverImage,
             LOGO_IMAGE: this.logoImage,
             ALAMAT: this.alamat,
             NO_HP: this.no_hp,
-            USERNAME: this.$store.getters.getUser.USERNAME 
+            USERNAME: this.$store.getters.getUser.USERNAME ,
+            LATITUDE: longlat[0],
+            LONGITUDE: longlat[1]
         }
 
         const headers = {
@@ -227,6 +249,9 @@ export default {
     deleteDropFile(index) {
         this.dropFiles.splice(index, 1)
     },
+    popUpMap: function() {
+        this.isComponentModalActive = true
+    },
     onSuccess(res) {
         this.fotoProduk.push(res)        
     },
@@ -244,7 +269,13 @@ export default {
             this.alamat = res.data.data.ALAMAT
             this.coverImage = res.data.data.COVER_IMAGE
             this.logoImage = res.data.data.LOGO_IMAGE
+            this.longlat = res.data.data.LATLONG
         })
+    },
+    getLongLat: function(value) {
+        this.longlat = value
+        this.isComponentModalActive = false
+        console.log(value)
     }
   },
   created() {
@@ -257,6 +288,14 @@ export default {
           alert('Anda belum login!')
           this.$router.push('/p/login')
       }      
-  }   
+  },
+  updated() {
+      console.log(this.$refs.modalMap)
+  },
+//   watch : {
+//     modalMap : function (value) {
+//         console.log(value)
+//     }
+//   },    
 }
 </script>
