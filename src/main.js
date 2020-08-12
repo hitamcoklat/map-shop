@@ -42,7 +42,7 @@ Vue.use(VueLazyload)
 Vue.config.productionTip = false
 
 // Vue.prototype.$api = 'http://192.168.0.110/project/igtoko';
-Vue.prototype.$api = 'https://app.igtoko.com';
+Vue.prototype.$api = 'https://app.igtoko.com/index.php';
 Vue.prototype.$http = axios;
 
 new Vue({
