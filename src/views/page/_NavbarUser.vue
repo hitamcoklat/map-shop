@@ -51,7 +51,7 @@ export default {
             this.$emit('tentangDialog', true)
             this.$buefy.dialog.confirm({
                 title: 'Tentang IGtoko.com',
-                message: `Marketplace dan Website sudah banyak digunakan oleh para "Pebisnis Online" sejak 2017 - saat inim baik UMKM maupun Personal Seller. <b>IGToko</b> didesain khusus bagi penjual online di Indonesia baik untuk penjualan Produk Fisik, Virtual maupun Jasa.<br><br>Tampilan <b>IGToko.com</b> cocok digunakan untuk pembeli lokal +62 (Indonesia), dimana pengguna lebih senang membeli langsung melalui WhatsApp ketimbang menggunakan proses checkout yang ribet!.<br><br>Dikembangkan oleh <a href="https://instagram.com/septiandwia">Septian Dwi Anugrah</a>`,
+                message: `<strong>IGToko</strong> merupakan Platform untuk menghubungkan para penjual dan pembeli di lingkungan desa dan ditampilkan berdasarkan map/peta untuk memudahkan para pembeli mengetahui lokasi para penjual. Nama <strong>IGToko</strong> sendiri dibuat berdasarkan tampilan menyerupai Instagram untuk memudahkan para pengguna dalam mengelola platform ini. Platform ini dikelola oleh: <a href="https://instagram.com/teras.ukm">Teras UKM</a>`,
                 type: 'is-success',
                 animation: 'zoom-out',
                 onCancel: () => {

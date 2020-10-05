@@ -8,7 +8,7 @@
 
     <NavbarUser v-bind:alias="alias" />
 
-        <div style="margin-top: 1em; box-shadow: none !important;" class="card">
+        <div style="margin: 0 !important; box-shadow: none !important; background-color: white; padding: 0 !important;">
             <div class="card-content">
                 <div class="media">
                   <div class="media-left">
@@ -24,26 +24,18 @@
                       </p>
                   </div>
                 </div>
-
-                <div class="content">
-                    <div class="buttons">
-                        <b-button 
-                        @click="kirimWhatsapp(dataUser.NO_HP)"
-                        type="is-primary" expanded>Hubungi Toko via WA</b-button>
-                    </div>
-                </div>
             </div>
         </div>
 
         <div style="overflow-y: auto; margin: 0 !important;" class="columns is-mobile">
-            <div v-bind:style="{backgroundColor: (selectedCategory == '') ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; border: 1px solid #CCC; font-weight: bold; border-radius: 5px; margin-right: 10px;" @click="fetchData" class="column is-5">
+            <div v-bind:style="{backgroundColor: (selectedCategory == '') ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; border: 1px solid #CCC; font-weight: bold; border-radius: 5px; margin-right: 10px; font-size: 0.8em;" @click="fetchData" class="column is-5">
                 Semua
             </div>
-            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" v-bind:style="{backgroundColor: (item.ID == selectedCategory) ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; font-weight: bold; border-radius: 5px; margin-right: 10px; border: 1px solid #CCC;" @click="getDataByCategory(item.ID)" class="column is-5">
+            <div v-for="(item, index) in dataCategory" :key="index" :ref="index" v-bind:style="{backgroundColor: (item.ID == selectedCategory) ? '#b4b5b8' : 'white'}" style="text-align: center; padding-top: 1em; color: black; font-weight: bold; border-radius: 5px; margin-right: 10px; border: 1px solid #CCC; font-size: 0.8em;" @click="getDataByCategory(item.ID)" class="column is-5">
                 {{item.NAMA_KATEGORI}}
             </div>
         </div>                    
-    <div style="width: 100%; margin-top: 1.5em;" class="listProduk">
+    <div style="width: 100%; margin-top: 1.5em; padding-left: 2em; padding-right: 2em;" class="listProduk">
       <div style="" class="columns is-multiline is-mobile">
         <div v-for="(item, index) in dataProduk" :key="index" :ref="index" class="column is-half">
           <router-link v-bind:to="alias + '/product/' + item.SLUG">
@@ -70,6 +62,9 @@
       </footer>    
   </div>
   <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>      
+  <a @click="kirimWhatsapp(dataUser.NO_HP)" class="float" target="_blank">
+    <font-awesome-icon icon="phone-alt" class="my-float" />
+  </a>
 </div>
 </template>
 
@@ -83,6 +78,24 @@
   }
   img {
       vertical-align:middle
+  }
+  .float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:40px;
+    right:40px;
+    background-color:#25d366;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    font-size:30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index:100;
+  }
+
+  .my-float{
+    margin-top:16px;
   }  
 </style>
 

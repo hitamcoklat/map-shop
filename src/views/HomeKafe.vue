@@ -238,7 +238,7 @@ export default {
     isLoading: false,
     fotoProduk: [],
     btnKDaftarToko: true,
-    zoom: 17,
+    zoom: 12.5,
     center: latLng(-6.9005281, 107.5985346),
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     attribution:

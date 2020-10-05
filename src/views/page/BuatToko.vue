@@ -85,7 +85,7 @@ export default {
         },  
         submitToko: async function() {
 
-            if(typeof this.form.username == 'undefined' || typeof this.form.no_hp == 'undefined' || typeof this.form.email == 'undefined' || typeof this.form.password == 'undefined') {
+            if(typeof this.form.username == 'undefined' || typeof this.form.no_hp == 'undefined' || typeof this.form.password == 'undefined') {
                 return this.$buefy.dialog.alert('Mohon isi semua kolom!')
             }
 
