@@ -1,59 +1,59 @@
 <template>
     <div>
-            <div style="position: relative;">
-              <navbar-user style="max-width: 450px; position: fixed; margin-left: auto; margin-right: auto; left: 0; right: 0;" @tentangDialog="tentangDialog" />
-              <l-map
-                :zoom="zoom"
-                :center="center"
-                :options="mapOptions"
-                style="height: 93vh; z-index: 1; top: 55px;"
-                @update:center="centerUpdate"
-                @update:zoom="zoomUpdate"
-              >
-                <l-circle
-                  :lat-lng="center"
-                  :radius="circle.radius"
-                />               
-                <l-tile-layer
-                  :url="url"
-                  :attribution="attribution"
-                />               
-                <l-marker
-                  :lat-lng="center"
-                  :icon="iconPerson"
-                >   
-                </l-marker>                
-                <l-marker
-                  v-for="(item, index) in arrayMarker"
-                  :key="'marker-' + index"
-                  :lat-lng="item.lokasiTempat"
-                  :icon="icon"
-                >
-                  <l-tooltip :options="{ permanent: true, interactive: true }">
-                    <div @click="innerClick(item)">
-                      <strong>@{{item.usernameToko}}</strong>
-                    </div>
-                  </l-tooltip>      
-                </l-marker>
-                <footer
-                  style="color: white;
-                        position: fixed;
-                        text-align: center;
-                        margin-left: auto;
-                        margin-right: auto;
-                        left: 0;
-                        right: 0;
-                        bottom: 10px;
-                        max-width: 450px;
-                        z-index: 9999;">
-                  <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
-                    <div class="buttons">
-                        <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
-                    </div>          
-                  </div>
-                </footer>                                
-              </l-map>                         
-            </div>        
+        <div style="position: relative;">
+          <navbar-user style="max-width: 450px; position: fixed; margin-left: auto; margin-right: auto; left: 0; right: 0;" @tentangDialog="tentangDialog" />
+          <l-map
+            :zoom="zoom"
+            :center="center"
+            :options="mapOptions"
+            style="height: 93vh; z-index: 1;"
+            @update:center="centerUpdate"
+            @update:zoom="zoomUpdate"
+          >
+            <l-circle
+              :lat-lng="center"
+              :radius="circle.radius"
+            />               
+            <l-tile-layer
+              :url="url"
+              :attribution="attribution"
+            />               
+            <l-marker
+              :lat-lng="center"
+              :icon="iconPerson"
+            >   
+            </l-marker>                
+            <l-marker
+              v-for="(item, index) in arrayMarker"
+              :key="'marker-' + index"
+              :lat-lng="item.lokasiTempat"
+              :icon="icon"
+            >
+              <l-tooltip :options="{ permanent: true, interactive: true }">
+                <div @click="innerClick(item)">
+                  <strong>@{{item.usernameToko}}</strong>
+                </div>
+              </l-tooltip>      
+            </l-marker>
+            <footer
+              style="color: white;
+                    position: fixed;
+                    text-align: center;
+                    margin-left: auto;
+                    margin-right: auto;
+                    left: 0;
+                    right: 0;
+                    bottom: 10px;
+                    max-width: 450px;
+                    z-index: 9999;">
+              <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
+                <div class="buttons">
+                    <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
+                </div>          
+              </div>
+            </footer>                                
+          </l-map>                         
+        </div>        
         <b-modal
           style="z-index: 9999;" 
           :active.sync="isComponentModalActive"
@@ -66,7 +66,7 @@
           <modal-toko v-bind:dataToko="dataToko"></modal-toko>
         </b-modal>           
 
-      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>           
+      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>          
     </div>
 </template>
 <style scoped>
@@ -189,6 +189,7 @@ import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LCircle, LIcon } from "vue
 import { Icon } from 'leaflet';
 import NavbarUser from './page/_NavbarUser'
 import ModalToko from './ModalToko'
+import Carousel from '../components/Carousel'
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -201,6 +202,7 @@ export default {
   name: 'HomeLandingPage',
   components: {
     'navbar-user': NavbarUser,
+    Carousel,
     LMap,
     LTileLayer,
     LMarker,

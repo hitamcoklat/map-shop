@@ -3,11 +3,13 @@
   <div style="max-width: 500px;" class="container">
     <NavbarUser v-bind:alias="alias" />
     <div style="margin-bottom: 2.5em;" v-for="item in dataProduk" :key="item.ID" :ref="item.ID" class="column" :id="item.SLUG">
+        <div v-if="item.IMAGES.length > 0">
         <b-carousel>
             <b-carousel-item v-for="(carousel, i) in item.IMAGES" :key="i">
                 <img :alt="item.NAMA_PRODUK" v-lazy="carousel.img">
             </b-carousel-item>
-        </b-carousel>                
+        </b-carousel>               
+        </div> 
         <div style="padding-left: 1em; padding-right: 1em;">
             <p style="font-weight: normal;">{{item.NAMA_PRODUK}}</p>
             <p>
@@ -29,7 +31,7 @@
                 <div class="media">
                     <div class="media-left">
                         <figure class="image is-48x48">
-                            <img :alt="selectedProduk.NAMA_PRODUK" v-bind:src="selectedProduk.IMAGES[0].thumb">
+                            <img :alt="selectedProduk.NAMA_PRODUK" v-bind:src="(selectedProduk.IMAGES.length > 0) ? selectedProduk.IMAGES[0].thumb : 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG'">
                         </figure>
                     </div>
                     <div class="media-content">

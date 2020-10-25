@@ -62,7 +62,7 @@
         <div v-for="item in listProduk" :key="item.ID" :ref="item.ID" class="media">
             <div v-on:click="toProduct(item.SLUG)" class="media-left">
                 <figure class="image is-48x48">
-                    <img :alt="item.NAMA_PRODUK" v-bind:src="item.IMAGES[0].thumb" />
+                    <img :alt="item.NAMA_PRODUK" v-bind:src="(item.IMAGES.length > 0) ? item.IMAGES[0].thumb : 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG'" />
                 </figure>
             </div>
             <div class="media-content">

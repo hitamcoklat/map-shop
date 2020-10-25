@@ -12,7 +12,7 @@
                 <div style="padding: 0.5em;" class="card-content">
                     <div class="content">
                         <p style="text-align: left;">
-                            <img style="width: 64px; float: left; margin-right: 10px;" :alt="item.IMAGES[0].thumb" v-bind:src="item.IMAGES[0].thumb" />
+                            <img style="width: 64px; float: left; margin-right: 10px;" :alt="(item.IMAGES.length == 0) ? 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG' : item.IMAGES[0].thumb" v-bind:src="(item.IMAGES.length == 0) ? 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG' : item.IMAGES[0].thumb" />
                             {{item.CAPTION}}
                             <br />
                         </p>

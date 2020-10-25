@@ -39,7 +39,7 @@
       <div style="" class="columns is-multiline is-mobile">
         <div v-for="(item, index) in dataProduk" :key="index" :ref="index" class="column is-half">
           <router-link v-bind:to="alias + '/product/' + item.SLUG">
-            <img style="width: 100%;" :alt="item.nama_produk" v-lazy="item.IMAGES[0].img">
+            <img style="width: 100%;" :alt="item.nama_produk" v-lazy="(item.IMAGES.length == 0) ? 'https://ik.imagekit.io/igtoko/no-image-icon-11_evq7Xk7Mt.PNG' : item.IMAGES[0].img">
           </router-link>
         </div>
       </div>
@@ -61,7 +61,7 @@
         </div>
       </footer>    
   </div>
-  <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>      
+  <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>      
   <a @click="kirimWhatsapp(dataUser.NO_HP)" class="float" target="_blank">
     <font-awesome-icon icon="phone-alt" class="my-float" />
   </a>
