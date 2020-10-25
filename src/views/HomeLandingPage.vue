@@ -49,7 +49,7 @@
                   bottom: 10px;
                   max-width: 450px;
                   z-index: 9999;">
-            <Carousel />                       
+              <Carousel v-bind:dataToko="arrayMarker" />                       
 <!--             <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
               <div class="buttons">
                   <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
@@ -269,7 +269,6 @@ export default {
         this.isLoading = true
         this.$http.get(this.$api + '/api/getListToko/')
             .then((res) => {
-              console.log(res)
               this.arrayMarker = []
               this.isLoading = false
               this.fotoProduk = res.data.data
@@ -289,7 +288,6 @@ export default {
             })          
       },
       tutupModal: function() {
-        console.log('Modal di tutup')
         if(this.$store.getters.getLoginStatus == true) {
           this.isLogin = true
           this.btnKDaftarToko = false
