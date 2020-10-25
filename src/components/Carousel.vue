@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-image">
                     <figure class="image is-5by4">
-                        <a @click="info(list.index)"><img :src="list.image"></a>
+                        <a @click="info(list.index)"><img :src="list.image" /></a>
                     </figure>
                     <b-tag type="is-danger" rounded style="position: absolute; top: 0;"><b>50%</b></b-tag>
                 </div>
@@ -17,7 +17,9 @@
                                 <b-rate :value="list.rating" show-score disabled/>
                             </p>
                             <p class="control" style="margin-left: auto">
-                                <button class="button is-small is-danger is-outlined"><b-icon size="is-small" icon="heart"/></button>
+                                <button class="button is-small is-danger is-outlined">
+                                    <font-awesome-icon icon="times-circle" />
+                                </button>
                             </p>
                         </div>
                     </div>

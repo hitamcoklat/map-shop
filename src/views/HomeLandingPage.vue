@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="position: relative;">
-          <navbar-user style="max-width: 450px; position: fixed; margin-left: auto; margin-right: auto; left: 0; right: 0;" @tentangDialog="tentangDialog" />
+          <navbar-user style="max-width: 450px; position: fixed; margin-left: auto; margin-right: auto; left: 0; right: 0;" @tentangDialog="tentangDialog" />     
           <l-map
             :zoom="zoom"
             :center="center"
@@ -35,24 +35,27 @@
                 </div>
               </l-tooltip>      
             </l-marker>
-            <footer
-              style="color: white;
-                    position: fixed;
-                    text-align: center;
-                    margin-left: auto;
-                    margin-right: auto;
-                    left: 0;
-                    right: 0;
-                    bottom: 10px;
-                    max-width: 450px;
-                    z-index: 9999;">
-              <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
-                <div class="buttons">
-                    <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
-                </div>          
-              </div>
-            </footer>                                
-          </l-map>                         
+          </l-map> 
+          <div>
+          </div>               
+          <footer
+            style="color: white;
+                  position: fixed;
+                  text-align: center;
+                  margin-left: auto;
+                  margin-right: auto;
+                  left: 0;
+                  right: 0;
+                  bottom: 10px;
+                  max-width: 450px;
+                  z-index: 9999;">
+            <Carousel />                       
+<!--             <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
+              <div class="buttons">
+                  <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
+              </div>          
+            </div> -->
+          </footer>                                                                  
         </div>        
         <b-modal
           style="z-index: 9999;" 
