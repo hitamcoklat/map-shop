@@ -46,10 +46,10 @@
                   margin-right: auto;
                   left: 0;
                   right: 0;
-                  bottom: 10px;
-                  max-width: 450px;
+                  bottom: 0;
+                  max-width: 750px;
                   z-index: 9999;">
-              <Carousel v-bind:dataToko="arrayMarker" />                       
+              <Carousel v-bind:dataToko="arrayMarker" @popFromChild="popFromChild" />                       
 <!--             <div v-if="btnKDaftarToko" style="width: 90%; margin-left: auto; margin-right: auto;" class="content has-text-centered">
               <div class="buttons">
                   <b-button @click="toRegisterPage()" size="is-large" style="background-color: #ff697b; color: white; border: 1px solid #CCC;" expanded>Buat Toko Anda.</b-button>
@@ -327,7 +327,12 @@ export default {
         this.dataToko = item;
         this.isComponentModalActive = true
         this.btnKDaftarToko = false
-      }      
+      },
+      popFromChild: function(item) {
+        this.dataToko = item;
+        this.isComponentModalActive = true
+        this.btnKDaftarToko = false
+      }     
   },
   created() {
     this.$getLocation({

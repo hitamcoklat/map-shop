@@ -10,6 +10,9 @@
         </template>
         <template slot="end">
             <b-navbar-dropdown>
+                <b-navbar-item style="font-weight: bold; color: white; background-color: #00D1B2;" v-show="btnLogin"  tag="router-link" :to="{ path: '/p/price-list' }">
+                    Klik Untuk Buat Toko Kamu
+                </b-navbar-item>
                 <b-navbar-item v-show="btnKelolaToko"  tag="router-link" :to="{ path: '/p/manage' }">
                     Kelola Toko
                 </b-navbar-item>
