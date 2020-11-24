@@ -17,9 +17,11 @@ import { faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faP
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import infiniteScroll from 'vue-infinite-scroll'
 import VueGeolocation from 'vue-browser-geolocation';
+import { firestorePlugin } from 'vuefire'
 
 library.add(faSyncAlt, faHandPointRight, faCartPlus, faChevronCircleUp, faUser, faPhoneAlt, faAt, faMailBulk, faTimesCircle, faUpload, faCookieBite, faTags, faBalanceScaleRight, faComments, faGlobe);
 
+Vue.use(firestorePlugin)
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component('vue-headful', vueHeadful);
 
