@@ -1,4 +1,7 @@
-# simple-shop
+# map-shop
+
+## Screenshot
+![Demo Animation](./video/igtoko-video.gif?raw=true)
 
 ## Project setup
 ```
@@ -14,6 +17,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Screenshot
-![Demo Animation](./video/igtoko-video.gif?raw=true)
