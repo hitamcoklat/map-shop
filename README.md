@@ -1,4 +1,4 @@
-# simple-shop
+# map-shop
 
 ## Project setup
 ```
